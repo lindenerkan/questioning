@@ -1,0 +1,75 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
+
+        <!-- Le styles -->
+        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/images/favicon.ico'))
+                        ->prependStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
+                        ->prependStylesheet($this->basePath() . '/css/style.css')
+                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
+
+        <!-- Scripts -->
+        <?php echo $this->headScript()->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                                      ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+                                      ->prependFile($this->basePath() . '/js/jquery.min.js') ?>
+
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Online Questioning') ?></a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav">
+                            <li><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
+                            <?php if($this->zfcUserIdentity()): ?>
+                                <?php if($this->zfcUserIdentity()->getAdmin()): ?>
+                                    <li><a href="<?php echo $this->url('instructor/panel') ?>"><?php echo $this->translate('Panel') ?></a></li>
+                                <?php endif ?>
+                            <?php endif ?>
+                        </ul>
+                        
+                        <?php if(!$this->zfcUserIdentity()): ?>
+                <form class="navbar-form pull-right" method="post" action="<?php echo $this->url('zfcuser/login', array('locale' => \Locale::getDefault())) ?>">
+                    <input class="span2" type="text" name="identity" placeholder="<?php echo $this->translate('E-mail') ?>">
+                    <input class="span2" type="password" name="credential" placeholder="<?php echo $this->translate('Password') ?>">
+                    <button type="submit" class="btn"><?php echo $this->translate('Sign In') ?></button>
+                </form>
+                <?php else: ?>
+                <ul class="nav pull-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $this->zfcUserIdentity()->getDisplayName() ?> <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                          <li><a href="<?php echo $this->url('application/changepassword', array('locale' => \Locale::getDefault())) ?>"><?php echo $this->translate('Change Password') ?></a></li>
+                          <li><a href="<?php echo $this->url('application/changedisplayname', array()) ?>"><?php echo $this->translate('Change Display Name') ?></a></li>
+                          <li class="divider"></li>
+                          <li><a href="<?php echo $this->url('zfcuser/logout', array('locale' => \Locale::getDefault())) ?>"><?php echo $this->translate('Logout') ?></a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <?php endif ?>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <?php echo $this->content; ?>
+            <hr>
+            <footer>
+                <p>&copy; 2013 by Linden Digital Publishing <?php echo $this->translate('All rights reserved.') ?></p>
+            </footer>
+        </div> <!-- /container -->
+        <?php echo $this->inlineScript() ?>
+    </body>
+</html>

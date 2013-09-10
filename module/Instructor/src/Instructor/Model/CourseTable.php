@@ -1,0 +1,49 @@
+<?php
+namespace Instructor\Model;
+use Zend\Db\TableGateway\TableGateway;
+
+class CourseTable
+{
+
+    protected $tableGateway;
+
+    public function __construct (TableGateway $tableGateway)
+    {
+        $this->tableGateway = $tableGateway;
+    }
+
+    public function fetchAll ()
+    {
+        $resultSet = $this->tableGateway->select();
+        return $resultSet;
+    }
+    
+    public function getCourseID($code,$name)
+    {
+        $result= $this->tableGateway->select(array('code'=>$code,'name'=>$name))->current()->id;
+        echo $result;
+        return $result;
+    }
+    
+    public function verifyCourseCode($code)
+    {
+        $result=$this->tableGateway->select(array('code'=>$code))->current();
+    	if(!$result)
+            return true;
+    }
+    
+    public function addCourse($data)
+    {
+        $result=array(
+            'code'=>$data->code,
+            'name'=>$data->name
+        );
+        if($this->verifyCourseCode($result['code']))
+        {
+            if($this->tableGateway->insert($result))
+            {
+                return $this->getCourseID($result['code'], $result['name']);
+            }   	
+        }
+    }
+}
