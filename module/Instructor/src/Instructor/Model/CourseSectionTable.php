@@ -2,6 +2,7 @@
 namespace Instructor\Model;
 use Zend\Db\TableGateway\TableGateway;
 
+
 class CourseSectionTable
 {
 
@@ -18,6 +19,18 @@ class CourseSectionTable
         return $resultSet;
     }
     
+    public function getSections($courseId,$instructor_id)
+    {
+        $resultSet = $this->tableGateway->select(array('course_id'=>$courseId,'instructor_id'=>$instructor_id));
+        return $resultSet;
+    }
+    
+    public function getSectionsWithInstructorId($instructor_id)
+    {
+        $resultSet = $this->tableGateway->select(array('instructor_id'=>$instructor_id));
+        return $resultSet;
+    }
+        
     public function getID()
     {
         

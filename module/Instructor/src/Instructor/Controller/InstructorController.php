@@ -22,6 +22,8 @@ class InstructorController extends AbstractActionController
     
     protected $course_sectionTable;
     
+    protected $course_section_lessonTable;
+    
     protected function identity ()
     {
         $locale = $this->getEvent()
@@ -52,13 +54,60 @@ class InstructorController extends AbstractActionController
     	if (! $this->zfcUserAuthentication()->getIdentity()->getAdmin()) {
     	    return $this->redirect()->toRoute('home', array());
     	}
+
+    	
         return array(
         );
     }
     
     public function panelAction()
     {
+        $instructorId=$this->zfcUserAuthentication()->getIdentity()->getId();
+        
+        $result=array(
+            
+        );
+        
+        $courses=$this->getCourseTable()->getCourses();
+        foreach ($courses as $key=>$course)
+        {
+            $result[$key]['id']=$course->id;
+            $result[$key]['code']=$course->code;
+            $result[$key]['name']=$course->name;
+            $result[$key]['sections']=array();
+            
+            $sections=$this->getCourseSectionTable()->getSections($course->id,$instructorId);
+    	    foreach ($sections as $k=>$section)
+    	    {
+    	        $result[$key]['sections'][$k]['id']=$section->id;
+    	        $result[$key]['sections'][$k]['lessons']=array();
+    	        $lessons=$this->getCourseSectionLessonTable()->getLessons($section->id);
+    	        
+    	        foreach ($lessons as $i=>$lesson)
+    	        {
+    	            $result[$key]['sections'][$k]['lessons'][$i]['id']=$lesson->id;
+    	        }
+    	        
+    	    }   
+        }
+        
+        /*
+        foreach ($result as $a)
+        {
+            foreach ($a as $b)
+            {
+                foreach ($b as $c)
+                {
+                    print_r($c);
+                    echo "<br>";
+                }
+                echo "<br>";
+            }
+            echo "<br><br>";
+        }
+        */
         return array(
+            'courses'=>$result
         );
     }
     
@@ -113,5 +162,14 @@ class InstructorController extends AbstractActionController
     		$this->course_sectionTable = $sm->get('Instructor\Model\CourseSectionTable');
     	}
     	return $this->course_sectionTable;
+    }
+    
+    public function getCourseSectionLessonTable()
+    {
+    	if (!$this->course_section_lessonTable) {
+    		$sm = $this->getServiceLocator();
+    		$this->course_section_lessonTable = $sm->get('Instructor\Model\CourseSectionLessonTable');
+    	}
+    	return $this->course_section_lessonTable;
     }
 }

@@ -12,7 +12,7 @@ class CourseTable
         $this->tableGateway = $tableGateway;
     }
 
-    public function fetchAll ()
+    public function getCourses ()
     {
         $resultSet = $this->tableGateway->select();
         return $resultSet;

@@ -1,2 +1,50 @@
+<div class="hero-unit" style="background-color:rgba(207, 207, 207, 0.23);">
+    <?php foreach ($courses as $keycourse=>$course):?>
+    <div class="panel-group" id="accordion">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href=<?php echo '"#'.$keycourse.'"';?>>
+              <?php echo $course['code']. "  ". $course['name'];?>
+            </a>
+          </h4>
+        </div>
+        <div id=<?php echo '"'.$keycourse.'"';?> class="panel-collapse collapse">
+          <div class="panel-body">
+    
+           <div class="panel-group" id="accordion">
+           <?php foreach ($course['sections'] as $keysection=>$section):
+                   $sectiondisplay=(int) $keysection+1;?>
+               <div class="row" style="margin-left: 20px;">
+               <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href=<?php echo '"#00'.$keysection.$keycourse.'"';?>>
+                      <?php echo "Section ".$sectiondisplay; ?>
+                    </a>
+                  </h4>
+                </div>
+                <div id=<?php echo '"00'.$keysection.$keycourse.'"';?> class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <?php foreach ($section['lessons'] as $keylesson=>$lesson):
+                       $lessondisplay=(int) $keylesson+1;?>
+                       <h4><?php echo "Lesson ".$lessondisplay; ?></h4>
+                   <?php endforeach;?>
+                  </div>
+                </div>
+              </div>
+           </div>    
+           <?php endforeach;?> 
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <?php endforeach;?>
+    
+</div>
+
+
+
 <a href="<?php echo $this->url('instructor/default',
                     array('controller'=>'instructor','action' => 'createcourse'));?>">create course</a>

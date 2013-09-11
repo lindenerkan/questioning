@@ -15,6 +15,8 @@ use Instructor\Model\Course;
 use Instructor\Model\CourseTable;
 use Instructor\Model\CourseSection;
 use Instructor\Model\CourseSectionTable;
+use Instructor\Model\CourseSectionLesson;
+use Instructor\Model\CourseSectionLessonTable;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\ModuleManager\ModuleManager;
 use Zend\Db\ResultSet\ResultSet;
@@ -85,6 +87,19 @@ class Module
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new CourseSection());
     						return new TableGateway('Course_section', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Instructor\Model\CourseSectionLessonTable' => function  ($sm)
+    					{
+    						$tableGateway = $sm->get('CourseSectionLessonTableGateway');
+    						$table = new CourseSectionLessonTable($tableGateway);
+    						return $table;
+    					},
+    					'CourseSectionLessonTableGateway' => function  ($sm)
+    					{
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new CourseSectionLesson());
+    						return new TableGateway('Course_section_lesson', $dbAdapter, null, $resultSetPrototype);
     					},
     			)
     	);
