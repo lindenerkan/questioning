@@ -1,1 +1,42 @@
-student
+<div class="row">
+<div class="hero-unit span8" style="background-color:rgba(207, 207, 207, 0.23);">
+<?php foreach ($courses as $course):
+$activeLessonId=Null;
+$activeLesson=Null;?>
+    <?php foreach ($course['lessons'] as $l=>$lesson)
+    {
+        
+        if($lesson->is_active==1)
+        {
+            $activeLessonId=$lesson->id;
+            $activeLesson=$l+1;
+        }
+    }?>
+    
+<div class="row">
+    
+        <?php if($course['isStudentActive']){?>
+            <?php if($activeLessonId){?>
+                <a href="#" class="btn btn-success" style="width:55%">
+                    <?php echo $course['course']->code . " " .$course['course']->name;?> 
+                </a> <span class="text-success">Lesson started.</span>
+                
+                <?php } else{?>
+                <a href="#" class="btn btn-danger" style="width:55%" disabled="disabled">
+                    <?php echo $course['course']->code . " " .$course['course']->name;?>
+                </a> <span class="text-error">Lesson has not been started yet.</span>
+                <?php }?>
+        <?php } else{?>
+                <a href="#" class="btn btn-warning" style="width:55%" disabled="disabled">
+                    <?php echo $course['course']->code . " " .$course['course']->name;?>
+                </a> <span class="text-warning">Waiting for approval.</span>
+       <?php }?>
+</div><br>
+<?php ?>
+<?php endforeach;?>
+<div class="row">
+    <a href="<?php echo $this->url('student/default',array('controller'=>'student','action' => 'registerlist'));?>" class="btn btn-primary" style="width:55%">Register a course section</a>
+</div>
+</div>
+</div>
+<div class="row">

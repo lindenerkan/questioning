@@ -1,0 +1,72 @@
+<div class="hero-unit">
+<?php foreach ($quizes as $quiz){?>
+    <div class="row">
+        <span class="text-info"><?php echo $quiz->name;?></span>
+        <button class="btn btn-info btn-small form-edit" id="<?php echo $quiz->form_id;?>">Edit</button>
+        <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'deletequiz','id'=>$quiz->id,'key'=>$quiz->course_section_lesson_id));?>" class="btn btn-info btn-small form-edit">Delete</a>
+        <br><br>
+    </div>
+<?php }?>
+
+
+<?php
+// Init Form
+$form = $this->form;
+$form->setAttribute('class', 'form-horizontal');
+$form->prepare();
+
+// Configure Errors Helper
+$errorsHelper  = $this->plugin('formelementerrors');
+$errorsHelper
+    ->setMessageOpenFormat('<div class="help-block">')
+    ->setMessageSeparatorString('</div><div class="help-block">')
+    ->setMessageCloseString('</div>');
+?>
+<?php echo $this->form()->openTag($form); ?>
+<fieldset>
+    
+    <?php
+    $elem = $form->get('name');
+    $elem->setLabelAttributes(array('class' => 'control-label'));
+    $errors = $elem->getMessages();
+    $errorClass = (!empty($errors)) ? ' error' : '';
+    ?>
+    <div class="control-group<?php echo $errorClass ?>">
+        <?php echo $this->formLabel($elem); ?>
+        <div class="controls">
+            <?php echo $this->formText($elem); ?>
+            <?php echo $errorsHelper($elem); ?>
+            <button class="btn btn-primary btn-small">Create Quiz</button>
+        </div>
+    </div>
+
+
+</fieldset>
+<?php echo $this->form()->closeTag($form); ?>
+</div>
+
+<script type="text/javascript">
+JF.initialize({
+    enableCookieAuth : true, 
+    appName: "Online Questioning",
+    accessType: 'full' 
+});
+$(".form-edit").click(function(e) {
+	var formID = $(this).attr('id');
+	JF.login(
+		    function success() {
+		    	JotformAnywhere.editForm(
+		    	        formID
+		    	    );
+	    	    $(this).append(this);
+		    },
+		    function error() {
+		       // $("#loginresults").html("error during authorization");
+		    }
+		);
+
+
+	
+	
+});
+</script>

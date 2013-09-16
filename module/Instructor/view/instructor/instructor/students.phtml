@@ -1,0 +1,40 @@
+<?php $n=0;?>
+<div class="hero-unit">
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Display name</th>
+            <th>Activation</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($students as $s=>$student){?>
+        <?php if($student['section']->is_active){?>
+        <?php $n++;?>
+        <tr class="success">
+            <td><?php echo $n; ?></td>
+            <td><?php echo $student['student']->username; ?></td>
+            <td><?php echo $student['student']->email; ?></td>
+            <td><?php echo $student['student']->display_name; ?></td>
+            <td><a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'deactivatestudent','id'=>$student['section']->id));?>" class="btn btn-danger btn-small">Deactivate</a></td>
+        </tr>
+        <?php }?>
+    <?php } ?>
+    <?php foreach ($students as $s=>$student){?>
+        <?php if(!$student['section']->is_active){?>
+        <?php $n++;?>
+        <tr class="error">
+            <td><?php echo $n; ?></td>
+            <td><?php echo $student['student']->username; ?></td>
+            <td><?php echo $student['student']->email; ?></td>
+            <td><?php echo $student['student']->display_name; ?></td>
+            <td><a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'activatestudent','id'=>$student['section']->id));?>" class="btn btn-success btn-small">Activate</a></td>
+        </tr>
+        <?php }?>
+    <?php } ?>
+    </tbody>
+</table>
+</div>

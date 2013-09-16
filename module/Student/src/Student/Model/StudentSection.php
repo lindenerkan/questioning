@@ -1,28 +1,28 @@
 <?php
-namespace Instructor\Model;
+namespace Student\Model;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
-class CourseSection
+class StudentSection
 {
-
-    public $id;
-
-    public $course_id;
-
-    public $instructor_id;
     
-    public $name;
+    public $id;
+    
+    public $student_id;
+
+    public $course_section_id;
+    
+    public $is_active;
 
     protected $inputFilter;
 
     public function exchangeArray ($data)
     {
         $this->id = (isset($data['id'])) ? $data['id'] : null;
-        $this->name = (isset($data['name'])) ? $data['name'] : null;
-        $this->course_id = (isset($data['course_id'])) ? $data['course_id'] : null;
-        $this->instructor_id = (isset($data['instructor_id'])) ? $data['instructor_id'] : null;
+        $this->student_id = (isset($data['student_id'])) ? $data['student_id'] : null;
+        $this->course_section_id = (isset($data['course_section_id'])) ? $data['course_section_id'] : null;
+        $this->is_active = (isset($data['is_active'])) ? $data['is_active'] : null;
     }
 
     public function getArrayCopy ()
@@ -42,33 +42,19 @@ class CourseSection
             $this->inputFilter = new InputFilter();
             $factory = new InputFactory();
             
-            $this->inputFilter->add(
-            		$factory->createInput(
-            				array(
-            						'name' => 'name',
-            						'required' => true,
-            						'filters' => array(
-            								array(
-            										'name' => 'StripTags'
-            								),
-            								array(
-            										'name' => 'StringTrim'
-            								)
-            						),
-            						'validators' => array(
-            								array(
-            										'name' => 'StringLength',
-            										'options' => array(
-            												'encoding' => 'UTF-8',
-            												'min' => 0,
-            												'max' => 128
-            										)
-            								)
-            						)
-            				)));
             
             $this->inputFilter->add($factory->createInput(array(
-                'name' => 'id',
+            		'name' => 'id',
+            		'required' => true,
+            		'filters' => array(
+            				array(
+            						'name' => 'Int'
+            				)
+            		)
+            )));
+            
+            $this->inputFilter->add($factory->createInput(array(
+                'name' => 'student_id',
                 'required' => true,
                 'filters' => array(
                     array(
@@ -76,19 +62,9 @@ class CourseSection
                     )
                 )
             )));
-
+            
             $this->inputFilter->add($factory->createInput(array(
-            		'name' => 'course_id',
-            		'required' => true,
-            		'filters' => array(
-            				array(
-            						'name' => 'Int'
-            				)
-            		)
-            )));
-           
-            $this->inputFilter->add($factory->createInput(array(
-            		'name' => 'instructor_id',
+            		'name' => 'is_active',
             		'required' => true,
             		'filters' => array(
             				array(
@@ -97,6 +73,17 @@ class CourseSection
             		)
             )));
             
+            $this->inputFilter->add($factory->createInput(array(
+            		'name' => 'course_section_id',
+            		'required' => true,
+            		'filters' => array(
+            				array(
+            						'name' => 'Int'
+            				)
+            		)
+            )));
+            
+                
             $this->inputFilter = $inputFilter;
         }
         

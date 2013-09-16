@@ -13,6 +13,14 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Student\Model\Student;
 use Student\Model\StudentTable;
+use Student\Model\StudentSection;
+use Student\Model\StudentSectionTable;
+use Student\Model\Course;
+use Student\Model\CourseTable;
+use Student\Model\Lesson;
+use Student\Model\LessonTable;
+use Student\Model\CourseSection;
+use Student\Model\CourseSectionTable;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\ModuleManager\ModuleManager;
 use Zend\Db\ResultSet\ResultSet;
@@ -69,7 +77,59 @@ class Module
     						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new Student());
-    						return new TableGateway('Student', $dbAdapter, null, $resultSetPrototype);
+    						return new TableGateway('users', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Student\Model\StudentSectionTable' => function  ($sm)
+    					{
+    						$tableGateway = $sm->get('StudentSectionTableGateway');
+    						$table = new StudentSectionTable($tableGateway);
+    						return $table;
+    					},
+    					'StudentSectionTableGateway' => function  ($sm)
+    					{
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new StudentSection());
+    						return new TableGateway('Student_section', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Student\Model\CourseTable' => function  ($sm)
+    					{
+    						$tableGateway = $sm->get('CourseTableGateway');
+    						$table = new CourseTable($tableGateway);
+    						return $table;
+    					},
+    					'CourseTableGateway' => function  ($sm)
+    					{
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new Course());
+    						return new TableGateway('Course', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Student\Model\CourseSectionTable' => function  ($sm)
+    					{
+    						$tableGateway = $sm->get('CourseSectionTableGateway');
+    						$table = new CourseSectionTable($tableGateway);
+    						return $table;
+    					},
+    					'CourseSectionTableGateway' => function  ($sm)
+    					{
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new CourseSection());
+    						return new TableGateway('Course_section', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Student\Model\LessonTable' => function  ($sm)
+    					{
+    						$tableGateway = $sm->get('LessonTableGateway');
+    						$table = new LessonTable($tableGateway);
+    						return $table;
+    					},
+    					'LessonTableGateway' => function  ($sm)
+    					{
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new Lesson());
+    						return new TableGateway('Course_section_lesson', $dbAdapter, null, $resultSetPrototype);
     					},
     			)
     	);

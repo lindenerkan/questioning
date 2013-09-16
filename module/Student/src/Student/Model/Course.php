@@ -4,25 +4,22 @@ use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
-class Student
+class Course
 {
 
-    public $studentID;
+    public $id;
 
-    public $email;
+    public $code;
 
-    public $username;
-    
-    public $display_name;
+    public $name;
 
     protected $inputFilter;
 
     public function exchangeArray ($data)
     {
-        $this->studentID = (isset($data['studentID'])) ? $data['studentID'] : null;
-        $this->email = (isset($data['email'])) ? $data['email'] : null;
-        $this->username = (isset($data['username'])) ? $data['username'] : null;
-        $this->display_name = (isset($data['display_name'])) ? $data['display_name'] : null;
+        $this->id = (isset($data['id'])) ? $data['id'] : null;
+        $this->code = (isset($data['code'])) ? $data['code'] : null;
+        $this->name = (isset($data['name'])) ? $data['name'] : null;
     }
 
     public function getArrayCopy ()
@@ -43,7 +40,7 @@ class Student
             $factory = new InputFactory();
             
             $this->inputFilter->add($factory->createInput(array(
-                'name' => 'email',
+                'name' => 'code',
                 'required' => true,
                 'filters' => array(
                             array(
@@ -66,30 +63,7 @@ class Student
             )));
             
             $this->inputFilter->add($factory->createInput(array(
-            		'name' => 'display_name',
-            		'required' => true,
-            		'filters' => array(
-            				array(
-            						'name' => 'StripTags'
-            				),
-            				array(
-            						'name' => 'StringTrim'
-            				)
-            		),
-            		'validators' => array(
-            				array(
-            						'name' => 'StringLength',
-            						'options' => array(
-            								'encoding' => 'UTF-8',
-            								'min' => 0,
-            								'max' => 128
-            						)
-            				)
-            		)
-            )));
-            
-            $this->inputFilter->add($factory->createInput(array(
-                'name' => 'studentID',
+                'name' => 'id',
                 'required' => true,
                 'filters' => array(
                     array(
@@ -101,7 +75,7 @@ class Student
             $this->inputFilter->add(
                 $factory->createInput(
                     array(
-                        'name' => 'username',
+                        'name' => 'name',
                         'required' => true,
                         'filters' => array(
                             array(

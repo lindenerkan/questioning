@@ -7,44 +7,127 @@
             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href=<?php echo '"#'.$keycourse.'"';?>>
               <?php echo $course['code']. "  ". $course['name'];?>
             </a>
+            <div style="float:right;">
+                <a href="#addSection<?php echo $course['id']?>" role="button" class="btn btn-info btn-small" data-toggle="modal">Add Section</a>
+                <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'editcourse','id'=>$course['id']));?>" class="btn btn-info btn-small">Edit Course</a>
+                <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'deletecourse','id'=>$course['id']));?>" class="btn btn-info btn-small">Delete Course</a>
+                <!-- Modal -->
+                    <div id="addSection<?php echo $course['id']?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel">Add Section for <?php echo $course['code']. "  ". $course['name'];?></h3>
+                      </div>
+                      <div class="modal-body">
+                        
+                        <?php
+                            // Init Form
+                            $form = $this->formSection;
+                            $form->setAttribute('class', 'form-horizontal');
+                            $form->prepare();
+                            
+                            // Configure Errors Helper
+                            $errorsHelper  = $this->plugin('formelementerrors');
+                            $errorsHelper
+                                ->setMessageOpenFormat('<div class="help-block">')
+                                ->setMessageSeparatorString('</div><div class="help-block">')
+                                ->setMessageCloseString('</div>');
+                            ?>
+                            <?php echo $this->form()->openTag($form); ?>
+                            <fieldset>
+                                
+                                
+                                <?php
+                                $elem = $form->get('course_id');
+                                $elem->setValue($course['id']);
+                                $elem->setLabelAttributes(array('class' => 'control-label'));
+                                $errors = $elem->getMessages();
+                                $errorClass = (!empty($errors)) ? ' error' : '';
+                                ?>
+                                <div class="control-group<?php echo $errorClass ?>">
+                                    <div class="controls">
+                                        <?php echo $this->formHidden($elem); ?>
+                                        <?php echo $errorsHelper($elem); ?>
+                                    </div>
+                                </div>
+                                
+                                
+                                <?php
+                                $elem = $form->get('name');
+                                $elem->setLabelAttributes(array('class' => 'control-label'));
+                                $errors = $elem->getMessages();
+                                $errorClass = (!empty($errors)) ? ' error' : '';
+                                ?>
+                                <div class="control-group<?php echo $errorClass ?>">
+                                    <?php echo $this->formLabel($elem); ?>
+                                    <div class="controls">
+                                        <?php echo $this->formText($elem); ?>
+                                        <?php echo $errorsHelper($elem); ?>
+                                        <button class="btn btn-primary btn-small">Create Section</button>
+                                    </div>
+                                </div>
+                            
+                            
+                            </fieldset>
+                            <?php echo $this->form()->closeTag($form); ?>
+                        
+                      </div>
+                      <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <!--  <a href="<?php //echo $this->url('instructor/default', array('controller'=>'instructor','action' => 'addsection','id'=>$course['id']));?>" class="btn btn-info btn-small">Add Section</a>-->
+                      </div>
+                    </div>
+            </div>
           </h4>
         </div>
         <div id=<?php echo '"'.$keycourse.'"';?> class="panel-collapse collapse">
           <div class="panel-body">
-    
-           <div class="panel-group" id="accordion">
-           <?php foreach ($course['sections'] as $keysection=>$section):
-                   $sectiondisplay=(int) $keysection+1;?>
+            <div class="row" style="margin-left: 20px;">
+                <div class="panel-group" id="accordion">
+               <?php foreach ($course['sections'] as $keysection=>$section):
+                  // $sectiondisplay=(int) $keysection+1;?>
                <div class="row" style="margin-left: 20px;">
                <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href=<?php echo '"#00'.$keysection.$keycourse.'"';?>>
-                      <?php echo "Section ".$sectiondisplay; ?>
+                      <?php echo $section['name'];//"Section ".$sectiondisplay; ?>
                     </a>
+                    <div style="float:right;">
+                        <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'deletesection','id'=>$section['id']));?>" class="btn btn-warning btn-small">Delete Section</a>
+                        <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'addlesson','id'=>$section['id']));?>" class="btn btn-warning btn-small">Add Lesson</a>
+                        <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'students','id'=>$section['id']));?>" class="btn btn-warning btn-small">Students</a>
+                    </div>
                   </h4>
                 </div>
                 <div id=<?php echo '"00'.$keysection.$keycourse.'"';?> class="panel-collapse collapse">
                   <div class="panel-body">
-                    <?php foreach ($section['lessons'] as $keylesson=>$lesson):
-                       $lessondisplay=(int) $keylesson+1;?>
-                       <h4><?php echo "Lesson ".$lessondisplay; ?></h4>
-                   <?php endforeach;?>
+                   <div class="row" style="margin-left: 20px;">
+                       <?php foreach ($section['lessons'] as $keylesson=>$lesson):
+                           $lessondisplay=(int) $keylesson+1;?>
+                           <h4 class="has-warning">
+                               <?php echo "Lesson ".$lessondisplay; ?>
+                               <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'quiz','id'=>$lesson['id']));?>" class="btn btn-success btn-small">Quiz</a>
+                               <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'deletelesson','id'=>$lesson['id']));?>" class="btn btn-danger btn-small">Delete Lesson</a>
+                           </h4>
+                       <?php endforeach;?>
+                   </div>
                   </div>
                 </div>
               </div>
            </div>    
            <?php endforeach;?> 
             </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <?php endforeach;?>
-    
+<br><br>
+<a href="<?php echo $this->url('instructor/default',
+                    array('controller'=>'instructor','action' => 'createcourse'));?>" class="btn btn-success" style="float:right">Create course</a>    
 </div>
 
+ 
 
 
-<a href="<?php echo $this->url('instructor/default',
-                    array('controller'=>'instructor','action' => 'createcourse'));?>">create course</a>

@@ -21,8 +21,13 @@ class CourseTable
     public function getCourseID($code,$name)
     {
         $result= $this->tableGateway->select(array('code'=>$code,'name'=>$name))->current()->id;
-        echo $result;
         return $result;
+    }
+    
+    public function getCourse($id)
+    {
+    	$result= $this->tableGateway->select(array('id'=>$id))->current();
+    	return $result;
     }
     
     public function verifyCourseCode($code)
@@ -45,5 +50,19 @@ class CourseTable
                 return $this->getCourseID($result['code'], $result['name']);
             }   	
         }
+    }
+    
+    public function updateCourse($data)
+    {
+    	$result=array(
+    			'code'=>$data->code,
+    			'name'=>$data->name
+    	);
+		$this->tableGateway->update($result,array('id'=>$data->id));
+    }
+    
+    public function deleteCourse($courseId)
+    {
+    	$this->tableGateway->delete(array('id' => $courseId));
     }
 }

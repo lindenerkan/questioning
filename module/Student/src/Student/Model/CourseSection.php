@@ -1,5 +1,5 @@
 <?php
-namespace Instructor\Model;
+namespace Student\Model;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;

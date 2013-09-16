@@ -23,4 +23,22 @@ class CourseSectionLessonTable
         $resultSet = $this->tableGateway->select(array('course_section_id'=>$course_section_id));
         return $resultSet;
     }
+    
+    public function addLesson($sectionId)
+    {
+    	$result=array(
+    			'course_section_id'=>$sectionId
+    	);
+    	$this->tableGateway->insert($result);
+    }
+    
+    public function deleteLesson($lessonId)
+    {
+        $this->tableGateway->delete(array('id' => $lessonId));
+    }
+    
+    public function deleteLessonsWithSectionId($sectionId)
+    {
+    	$this->tableGateway->delete(array('course_section_id' => $sectionId));
+    }
 }

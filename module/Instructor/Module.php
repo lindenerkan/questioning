@@ -11,8 +11,14 @@ namespace Instructor;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Instructor\Model\Student;
+use Instructor\Model\StudentTable;
+use Instructor\Model\StudentSection;
+use Instructor\Model\StudentSectionTable;
 use Instructor\Model\Course;
 use Instructor\Model\CourseTable;
+use Instructor\Model\Quiz;
+use Instructor\Model\QuizTable;
 use Instructor\Model\CourseSection;
 use Instructor\Model\CourseSectionTable;
 use Instructor\Model\CourseSectionLesson;
@@ -100,6 +106,45 @@ class Module
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new CourseSectionLesson());
     						return new TableGateway('Course_section_lesson', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Instructor\Model\StudentTable' => function  ($sm)
+    					{
+    						$tableGateway = $sm->get('StudentTableGateway');
+    						$table = new StudentTable($tableGateway);
+    						return $table;
+    					},
+    					'StudentTableGateway' => function  ($sm)
+    					{
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new Student());
+    						return new TableGateway('users', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Instructor\Model\StudentSectionTable' => function  ($sm)
+    					{
+    						$tableGateway = $sm->get('StudentSectionTableGateway');
+    						$table = new StudentSectionTable($tableGateway);
+    						return $table;
+    					},
+    					'StudentSectionTableGateway' => function  ($sm)
+    					{
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new StudentSection());
+    						return new TableGateway('Student_section', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Instructor\Model\QuizTable' => function  ($sm)
+    					{
+    						$tableGateway = $sm->get('QuizTableGateway');
+    						$table = new QuizTable($tableGateway);
+    						return $table;
+    					},
+    					'QuizTableGateway' => function  ($sm)
+    					{
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new Quiz());
+    						return new TableGateway('quiz', $dbAdapter, null, $resultSetPrototype);
     					},
     			)
     	);

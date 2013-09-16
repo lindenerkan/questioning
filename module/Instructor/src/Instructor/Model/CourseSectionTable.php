@@ -30,18 +30,25 @@ class CourseSectionTable
         $resultSet = $this->tableGateway->select(array('instructor_id'=>$instructor_id));
         return $resultSet;
     }
-        
-    public function getID()
+    
+    public function getSectionsWithCourseId($course_id)
     {
-        
+    	$resultSet = $this->tableGateway->select(array('course_id'=>$course_id));
+    	return $resultSet;
     }
     
-    public function addCourseSection($courseId,$instructorId)
+    public function addCourseSection($data,$instructorId)
     {
         $result=array(
-            'course_id'=>$courseId,
+            'name'=> $data['name'],
+            'course_id'=>$data['course_id'],
             'instructor_id'=>$instructorId
         );
         $this->tableGateway->insert($result);
+    }
+    
+    public function deleteSection($sectionId)
+    {
+    	$this->tableGateway->delete(array('id' => $sectionId));
     }
 }
