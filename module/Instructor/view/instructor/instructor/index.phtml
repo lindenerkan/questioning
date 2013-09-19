@@ -1,0 +1,48 @@
+<div class="row">
+<div class="span5">
+<div class="hero-unit">
+<?php foreach ($courses as $course):?>
+    <?php if($course['sections']):?>
+    <div class="row" style="margin-bottom:10px;">
+        <a href="<?php echo '#'.$course['code'];?>" role="button" class="btn btn-primary" data-toggle="modal" style="width:100%"><?php echo $course['code']. " ". $course['name'];?></a>
+    </div>
+     
+    <!-- Modal -->
+    <div id="<?php echo $course['code'];?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel"><?php echo $course['name'];?></h3>
+      </div>
+      <div class="modal-body">
+      
+      <?php foreach ($course['sections'] as $s=>$section):?>
+      <?php if(isset($section['lessons'][0]['id'])):?>
+          <h3><?php echo $section['section_name'];?></h3>
+          
+              <?php foreach ($section['lessons'] as $lesson):?>
+              <div class="row" style="padding-left:50px; padding-bottom:20px;">
+                  <span><?php echo $lesson['lesson_name'];?></span>
+                  <?php if(!$lesson['is_active']):?>
+                      <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'startlesson','id'=>$lesson['id']));?>" class="btn btn-primary btn-small">Start Lesson</a>
+                  <?php else:?>
+                      <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'lesson','id'=>$lesson['id']));?>" class="btn btn-success btn-small">Join Lesson</a>
+                      <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'endlesson','id'=>$lesson['id']));?>" class="btn btn-warning btn-small">End Lesson</a>
+                  <?php endif;?>
+              </div>
+              <?php endforeach;?>
+          
+      <?php endif;?>    
+      <?php endforeach;?>
+      
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+      </div>
+    </div>
+    
+    <?php endif;?>
+<?php endforeach;?>
+</div>
+</div>
+</div>
+

@@ -17,7 +17,7 @@ $activeLesson=Null;?>
     
         <?php if($course['isStudentActive']){?>
             <?php if($activeLessonId){?>
-                <a href="#" class="btn btn-success" style="width:55%">
+                <a href="<?php echo $this->url('student/default',array('controller'=>'student','action' => 'lesson','id'=>$lesson->id));?>" class="btn btn-success" style="width:55%">
                     <?php echo $course['course']->code . " " .$course['course']->name;?> 
                 </a> <span class="text-success">Lesson started.</span>
                 

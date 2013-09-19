@@ -13,6 +13,8 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Instructor\Model\Student;
 use Instructor\Model\StudentTable;
+use Instructor\Model\StudentQuestion;
+use Instructor\Model\StudentQuestionTable;
 use Instructor\Model\StudentSection;
 use Instructor\Model\StudentSectionTable;
 use Instructor\Model\Course;
@@ -145,6 +147,19 @@ class Module
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new Quiz());
     						return new TableGateway('quiz', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Instructor\Model\StudentQuestionTable' => function  ($sm)
+    					{
+    						$tableGateway = $sm->get('StudentQuestionTableGateway');
+    						$table = new StudentQuestionTable($tableGateway);
+    						return $table;
+    					},
+    					'StudentQuestionTableGateway' => function  ($sm)
+    					{
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new StudentQuestion());
+    						return new TableGateway('student_question', $dbAdapter, null, $resultSetPrototype);
     					},
     			)
     	);

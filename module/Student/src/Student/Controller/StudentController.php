@@ -12,6 +12,8 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Student\Model\Student;
 use Student\Model\StudentTable;
+use Student\Model\StudentQuestion;
+use Student\Model\StudentQuestionTable;
 use Student\Model\StudentSection;
 use Student\Model\StudentTableSection;
 use Student\Model\Course;
@@ -20,10 +22,13 @@ use Student\Model\Lesson;
 use Student\Model\LessonTable;
 use Student\Model\CourseSection;
 use Student\Model\CourseSectionTable;
+use Student\Form;
 
 class StudentController extends AbstractActionController
 {
     protected $studentTable;
+    
+    protected $studentquestionTable;
     
     protected $studentSectionTable;
     
@@ -109,6 +114,86 @@ class StudentController extends AbstractActionController
         );
     }
     
+    public function lessonAction()
+    {
+        $lessonId = (int) $this->params()->fromRoute('id', 0);
+        $studentId=$this->zfcUserAuthentication()->getIdentity()->getId();
+        if(!$this->getCourseSectionLessonTable()->isLesson($lessonId))
+        {
+            $isActive=0;
+        }
+        else 
+        {
+            $isActive=$this->getCourseSectionLessonTable()->isActive($lessonId);
+        }
+        
+       
+        
+        
+        if($isActive=='1')
+        {
+            $form = new Form\AskQuestionForm('askquestion-form');
+            if ($this->getRequest()->isPost()) {
+            	$quiz = new StudentQuestion();
+            	// Postback
+            	$data = array_merge_recursive(
+            			$this->getRequest()->getPost()->toArray(),
+            			$this->getRequest()->getFiles()->toArray()
+            	);
+            
+            	$form->setData($data);
+            	if ($form->isValid()) {
+            		$data = $form->getData();
+            		$quiz->exchangeArray($data);
+            		
+            		if($data['name'])
+            		{
+            		    $name=$this->zfcUserAuthentication()->getIdentity()->getDisplayName();
+            		}
+            		else 
+            		    $name=$this->zfcUserAuthentication()->getIdentity()->getUsername();
+            		
+            		
+            		
+            		$myFile = "log.html";
+            		$fh = fopen($myFile, 'r');
+            		$theData = fread($fh, filesize($myFile));
+            		fclose($fh);
+            		
+            		$myFile = "log.html";
+            		unlink($myFile);
+            		
+            		$id=$this->getStudentQuestionTable()->askQuestion($data,$studentId,$name);
+            		
+            		$text="<div class=\"row span5\">
+                    <div class=\"alert alert-success\">
+                    <a href=\""."http://localhost/OnlineQuestioning/public/index.php/instructor/instructor/questionRespond/".$lessonId."/".$id."\" class=\"close\" data-dismiss=\"alert\">&times;</a>
+                        <h4>".$name."</h4>
+                            <span>".$data['value']."</span>
+                                </div></div>".$theData;
+            		$fp = fopen("log.html", 'a');
+            		fwrite($fp, $text);
+            		fclose($fp);
+            		
+            		
+            		
+            		
+            		$this->redirect()->toRoute('student/default', array('controller'=>'student','action' => 'lesson','id'=>$lessonId));
+            	}
+            }
+            
+            return array(
+              'askQuestionForm' => $form,  
+              'lessonId'        =>$lessonId
+            );
+        }
+        else
+        {
+        	return $this->redirect()->toRoute('student/default', array('controller'=>'student','action' => 'index'));
+        }
+
+    }
+    
     public function registersectionAction()
     {
         $sectionId = (int) $this->params()->fromRoute('id', 0);
@@ -170,6 +255,24 @@ class StudentController extends AbstractActionController
     		$this->course_section_lessonTable = $sm->get('Student\Model\LessonTable');
     	}
     	return $this->course_section_lessonTable;
+    }
+    
+    public function getCourseSectionLessonTable()
+    {
+    	if (!$this->course_section_lessonTable) {
+    		$sm = $this->getServiceLocator();
+    		$this->course_section_lessonTable = $sm->get('Student\Model\CourseSectionLessonTable');
+    	}
+    	return $this->course_section_lessonTable;
+    }
+    
+    public function getStudentQuestionTable()
+    {
+    	if (!$this->studentquestionTable) {
+    		$sm = $this->getServiceLocator();
+    		$this->studentquestionTable = $sm->get('Student\Model\StudentQuestionTable');
+    	}
+    	return $this->studentquestionTable;
     }
     
 }

@@ -13,6 +13,8 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Student\Model\Student;
 use Student\Model\StudentTable;
+use Student\Model\StudentQuestion;
+use Student\Model\StudentQuestionTable;
 use Student\Model\StudentSection;
 use Student\Model\StudentSectionTable;
 use Student\Model\Course;
@@ -21,6 +23,8 @@ use Student\Model\Lesson;
 use Student\Model\LessonTable;
 use Student\Model\CourseSection;
 use Student\Model\CourseSectionTable;
+use Student\Model\CourseSectionLesson;
+use Student\Model\CourseSectionLessonTable;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\ModuleManager\ModuleManager;
 use Zend\Db\ResultSet\ResultSet;
@@ -130,6 +134,32 @@ class Module
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new Lesson());
     						return new TableGateway('Course_section_lesson', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Student\Model\CourseSectionLessonTable' => function  ($sm)
+    					{
+    						$tableGateway = $sm->get('CourseSectionLessonTableGateway');
+    						$table = new CourseSectionLessonTable($tableGateway);
+    						return $table;
+    					},
+    					'CourseSectionLessonTableGateway' => function  ($sm)
+    					{
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new CourseSectionLesson());
+    						return new TableGateway('Course_section_lesson', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Student\Model\StudentQuestionTable' => function  ($sm)
+    					{
+    						$tableGateway = $sm->get('StudentQuestionTableGateway');
+    						$table = new StudentQuestionTable($tableGateway);
+    						return $table;
+    					},
+    					'StudentQuestionTableGateway' => function  ($sm)
+    					{
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new StudentQuestion());
+    						return new TableGateway('student_question', $dbAdapter, null, $resultSetPrototype);
     					},
     			)
     	);

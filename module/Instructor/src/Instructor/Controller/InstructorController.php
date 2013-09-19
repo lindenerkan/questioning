@@ -12,6 +12,8 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Instructor\Model\Student;
 use Instructor\Model\StudentTable;
+use Instructor\Model\StudentQuestion;
+use Instructor\Model\StudentQuestionTable;
 use Instructor\Model\StudentSection;
 use Instructor\Model\StudentSectionTable;
 use Instructor\Model\Course;
@@ -21,6 +23,7 @@ use Instructor\Model\QuizTable;
 use Instructor\Model\CourseSection;
 use Instructor\Model\CourseSectionTable;
 use Instructor\Form;
+use Instructor\Model\CourseSectionLesson;
 
 class InstructorController extends AbstractActionController
 {
@@ -35,6 +38,8 @@ class InstructorController extends AbstractActionController
     protected $quizTable;
     
     protected $studentSectionTable;
+    
+    protected $studentquestionTable;
     
     protected function identity ()
     {
@@ -74,24 +79,35 @@ class InstructorController extends AbstractActionController
     	
     	foreach ($courses as $key=>$course)
     	{
-    	    //course -> instructor id yok!!!
-    	    if($course->instructor_id===$instructorId)
+    	    $result[$key]['id']=$course->id;
+    	    $result[$key]['code']=$course->code;
+    	    $result[$key]['name']=$course->name;
+    	    $result[$key]['sections']=array();
+    	    $sections=$this->getCourseSectionTable()->getSections($course->id,$instructorId);
+    	    foreach ($sections as $s=>$section)
     	    {
-    	        $result[$key]['id']=$course->id;
-    	        $result[$key]['code']=$course->code;
-    	        $result[$key]['name']=$course->name;
-    	        $result[$key]['sections']=array();
-    	        $sections=$this->getCourseSectionTable()->getSections($course->id,$instructorId);
-    	        foreach ($sections as $s=>$section)
-    	        {
-    	            $result[$key]['sections'][$s]['section_id']=$section->id;
-    	            $result[$key]['sections'][$s]['section_name']=$section->name;
+    	        if($section->instructor_id==$instructorId)
+    	        {	 
+    	        	$result[$key]['sections'][$s]['section_id']=$section->id;
+    	        	$result[$key]['sections'][$s]['section_name']=$section->name;
+    	        	$result[$key]['sections'][$s]['lessons']=array();
+    	        	
+    	        	$lessons=$this->getCourseSectionLessonTable()->getLessons($section->id);
+    	        	
+    	        	foreach ($lessons as $l=>$lesson)
+    	        	{
+    	        	    $result[$key]['sections'][$s]['lessons'][$l]['id']=$lesson->id;
+    	        	    $result[$key]['sections'][$s]['lessons'][$l]['lesson_name']=$lesson->name;
+    	        	    $result[$key]['sections'][$s]['lessons'][$l]['is_active']=$lesson->is_active;
+    	        	}
+    	        	
     	        }
-    	        
     	    }
     	}
     	
+    	
         return array(
+            'courses' =>$result
         );
     }
     
@@ -122,12 +138,13 @@ class InstructorController extends AbstractActionController
     	        foreach ($lessons as $i=>$lesson)
     	        {
     	            $result[$key]['sections'][$k]['lessons'][$i]['id']=$lesson->id;
+    	            $result[$key]['sections'][$k]['lessons'][$i]['name']=$lesson->name;
     	        }
     	        
     	    }   
         }
         
-        $formSection = new Form\CreatesectionForm('createsection-form');
+        $formSection = new Form\CreateSectionForm('createsection-form');
         if ($this->getRequest()->isPost()) {
         	$sectionName = new CourseSection();
         	// Postback
@@ -140,10 +157,34 @@ class InstructorController extends AbstractActionController
         	if ($formSection->isValid()) {
         		$data = $formSection->getData();
         		$sectionName->exchangeArray($data);
-                print_r($data);
-        		$instructorId=$this->zfcUserAuthentication()->getIdentity()->getId();
-        		$this->getCourseSectionTable()->addCourseSection($data,$instructorId);
-        		$this->redirect()->toRoute('instructor/panel');
+        		if(isset($data['course_id']))
+        		{
+        		    $instructorId=$this->zfcUserAuthentication()->getIdentity()->getId();
+        		    $this->getCourseSectionTable()->addCourseSection($data,$instructorId);
+        		    $this->redirect()->toRoute('instructor/panel');
+        		}
+        	}
+        }
+        
+        
+        $formLesson = new Form\CreateLessonForm('createlesson-form');
+        if ($this->getRequest()->isPost()) {
+        	$lessonName = new CourseSectionLesson();
+        	// Postback
+        	$data = array_merge_recursive(
+        			$this->getRequest()->getPost()->toArray(),
+        			$this->getRequest()->getFiles()->toArray()
+        	);
+        
+        	$formLesson->setData($data);
+        	if ($formLesson->isValid()) {
+        		$data = $formLesson->getData();
+        		$lessonName->exchangeArray($data);
+        		if(isset($data['course_section_id']))
+        		{
+        		    $this->getCourseSectionLessonTable()->addLesson($data);
+        		    $this->redirect()->toRoute('instructor/panel');
+        		}
         	}
         }
         
@@ -151,7 +192,8 @@ class InstructorController extends AbstractActionController
         
         return array(
             'courses'=>$result,
-            'formSection' =>$formSection
+            'formSection' =>$formSection,
+            'formLesson' =>$formLesson
         );
     }
     
@@ -318,6 +360,99 @@ class InstructorController extends AbstractActionController
         $this->redirect()->toRoute('instructor/panel');
     }
     
+    public function startlessonAction()
+    {
+        $courseSectionLessonId = (int) $this->params()->fromRoute('id', 0);
+        if($this->getCourseSectionLessonTable()->startLesson($courseSectionLessonId))
+        {
+            $this->redirect()->toRoute('instructor/default', array('controller'=>'instructor','action' => 'lesson','id'=>$courseSectionLessonId));
+        }
+        else 
+        {
+            $this->redirect()->toRoute('instructor/default', array('controller'=>'instructor','action' => 'index'));
+        }
+        
+    } 
+    
+    public function lessonAction()
+    {
+        $courseSectionLessonId = (int) $this->params()->fromRoute('id', 0);
+        if($this->getCourseSectionLessonTable()->isActive($courseSectionLessonId))
+        {
+            
+            $active_questions=$this->getStudentQuestionTable()->getActiveQuestions($courseSectionLessonId);
+            $passive_questions=$this->getStudentQuestionTable()->getPassiveQuestions($courseSectionLessonId);
+            
+            
+            $myFile = "log.html";
+            if(is_file($myFile))
+            unlink($myFile);
+            
+            foreach ($active_questions as $question)
+            {
+                $text="<div class=\"row span6\">
+                <div class=\"alert alert-success\">
+                    <a href=\""."http://localhost/OnlineQuestioning/public/index.php/instructor/instructor/questionRespond/".$courseSectionLessonId."/".$question->id."\" class=\"close\" data-dismiss=\"alert\">&times;</a>
+                        <h4>".$question->name."</h4>
+                            <span>".$question->value."</span>
+                                </div></div>";
+                $fp = fopen("log.html", 'a');
+                fwrite($fp, $text);
+                fclose($fp);
+            }
+            
+            
+            //<a href=\"\" class=\"close\" data-dismiss=\"alert\">&times;</a>
+            foreach ($passive_questions as $question)
+            {
+            	$text="<div class=\"row span6\">
+                <div class=\"alert alert-warning\">
+                        <h4>".$question->name."</h4>
+                            <span>".$question->value."</span>
+                                </div></div>";
+            	$fp = fopen("log.html", 'a');
+            	fwrite($fp, $text);
+            	fclose($fp);
+            }
+            //$this->url('instructor/default',array('controller'=>'instructor','action' => 'questionRespond','id'=>$courseSectionLessonId,'key'=>$question->id))
+            
+            
+            return array(
+                'active_questions' => $active_questions,
+                'passive_questions' =>$passive_questions,
+                'lessonId' =>$courseSectionLessonId
+            );
+        }
+        else 
+        {
+            $this->redirect()->toRoute('instructor/default', array('controller'=>'instructor','action' => 'index'));
+        }
+    }
+    
+    public function questionRespondAction()
+    {
+        $lessonId = (int) $this->params()->fromRoute('id', 0);
+        $questionId = (int) $this->params()->fromRoute('key', 0);
+        
+        $this->getStudentQuestionTable()->questionRespond($questionId);
+        
+        $this->redirect()->toRoute('instructor/default', array('controller'=>'instructor','action' => 'lesson','id'=>$lessonId));
+    }
+    
+    public function endlessonAction()
+    {
+        $courseSectionLessonId = (int) $this->params()->fromRoute('id', 0);
+        if($this->getCourseSectionLessonTable()->endLesson($courseSectionLessonId))
+        {
+            $this->redirect()->toRoute('instructor/default', array('controller'=>'instructor','action' => 'index'));
+        }
+        else 
+        {
+            $this->redirect()->toRoute('instructor/default', array('controller'=>'instructor','action' => 'lesson','id'=>$courseSectionLessonId));
+        }
+        
+    }
+    
     public function addlessonAction()
     {
     	$coursesectionId = (int) $this->params()->fromRoute('id', 0);
@@ -433,5 +568,14 @@ class InstructorController extends AbstractActionController
     		$this->quizTable = $sm->get('Instructor\Model\QuizTable');
     	}
     	return $this->quizTable;
+    }
+    
+    public function getStudentQuestionTable()
+    {
+    	if (!$this->studentquestionTable) {
+    		$sm = $this->getServiceLocator();
+    		$this->studentquestionTable = $sm->get('Instructor\Model\StudentQuestionTable');
+    	}
+    	return $this->studentquestionTable;
     }
 }
