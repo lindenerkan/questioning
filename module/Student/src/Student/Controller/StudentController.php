@@ -165,7 +165,7 @@ class StudentController extends AbstractActionController
             		
             		$id=$this->getStudentQuestionTable()->askQuestion($data,$studentId,$name);
             		
-            		$text="<div class=\"row span5\">
+            		$text="<div class=\"row span6\">
                     <div class=\"alert alert-success\">
                     <a href=\""."http://localhost/OnlineQuestioning/public/index.php/instructor/instructor/questionRespond/".$lessonId."/".$id."\" class=\"close\" data-dismiss=\"alert\">&times;</a>
                         <h4>".$name."</h4>

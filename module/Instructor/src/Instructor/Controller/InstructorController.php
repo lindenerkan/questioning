@@ -439,6 +439,54 @@ class InstructorController extends AbstractActionController
         $this->redirect()->toRoute('instructor/default', array('controller'=>'instructor','action' => 'lesson','id'=>$lessonId));
     }
     
+    public function quizpageAction()
+    {
+        $lessonId = (int) $this->params()->fromRoute('id', 0);
+        $quiz = (int) $this->params()->fromRoute('key', 0);
+        
+        if($quiz)
+        {
+            $quiz=$this->getQuizTable()->getQuiz($quiz);
+        }
+        
+        $quizes=$this->getQuizTable()->getLessonQuizes($lessonId);
+        
+        return array(
+            'quizes'     => $quizes,
+            'settedQuiz' => $quiz
+        );
+    }
+    
+    public function startQuizAction()
+    {
+        $quizId = (int) $this->params()->fromRoute('key', 0);
+        $lessonId = (int) $this->params()->fromRoute('id', 0);
+        
+        $quiz=$this->getQuizTable()->getQuiz($quizId)->form_id;
+        //$text='<script type="text/javascript" src="http://form.jotformeu.com/jsform/'.$quiz->form_id.'"></script>';
+        $text='<iframe id="JotFormIFrame" onload="window.parent.scrollTo(0,0)" allowtransparency="true" src="http://form.jotformeu.com/form/'.$quiz.'" frameborder="0" style="width:100%; height:465px; border:none;" scrolling="no"></iframe>';
+        $fp = fopen("quiz.html", 'a');
+        fwrite($fp, $text);
+        fclose($fp);
+        
+        
+        $this->getQuizTable()->startQuiz($quizId);
+        $this->redirect()->toRoute('instructor/default', array('controller'=>'instructor','action' => 'quizpage','id'=>$lessonId,'key'=>$quizId));
+    }
+
+    public function endQuizAction()
+    {
+    	$quizId = (int) $this->params()->fromRoute('key', 0);
+    	$lessonId = (int) $this->params()->fromRoute('id', 0);
+    	
+    	$myFile = "quiz.html";
+    	if(is_file($myFile))
+    		unlink($myFile);
+    
+    	$this->getQuizTable()->endQuiz($quizId);
+    	$this->redirect()->toRoute('instructor/default', array('controller'=>'instructor','action' => 'quizpage','id'=>$lessonId));
+    }
+    
     public function endlessonAction()
     {
         $courseSectionLessonId = (int) $this->params()->fromRoute('id', 0);

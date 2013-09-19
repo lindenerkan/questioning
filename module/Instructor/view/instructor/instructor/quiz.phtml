@@ -2,7 +2,7 @@
 <?php foreach ($quizes as $quiz){?>
     <div class="row">
         <span class="text-info"><?php echo $quiz->name;?></span>
-        <button class="btn btn-info btn-small form-edit" id="<?php echo $quiz->form_id;?>">Edit</button>
+        <button class="form_edit btn btn-info btn-small" id="<?php echo $quiz->form_id;?>">Edit</button>
         <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'deletequiz','id'=>$quiz->id,'key'=>$quiz->course_section_lesson_id));?>" class="btn btn-info btn-small form-edit">Delete</a>
         <br><br>
     </div>
@@ -46,12 +46,16 @@ $errorsHelper
 </div>
 
 <script type="text/javascript">
+//var $j = jQuery.noConflict();
+$(document).ready(function(){ 
+
+
 JF.initialize({
     enableCookieAuth : true, 
     appName: "Online Questioning",
-    accessType: 'full' 
+    accessType: 'full'
 });
-$(".form-edit").click(function(e) {
+$('.form_edit').click(function(e) {
 	var formID = $(this).attr('id');
 	JF.login(
 		    function success() {
@@ -64,9 +68,6 @@ $(".form-edit").click(function(e) {
 		       // $("#loginresults").html("error during authorization");
 		    }
 		);
-
-
-	
-	
+});
 });
 </script>

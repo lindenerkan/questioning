@@ -1,0 +1,44 @@
+<div class="row span12">
+  <?php if($settedQuiz):?>
+      <div class="hero-unit span6" style="padding:20px; text-align:center"> 
+          <h3 class="text-success">
+              <?php echo $settedQuiz->name;?>
+          </h3>
+          <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'endQuiz','id'=>$settedQuiz->course_section_lesson_id,'key'=>$settedQuiz->id));?>" class="btn btn-danger">End</a>
+          <br><br><br>
+          <span class="text-success" id="time" style="font-size:34px;"></span>
+      </div>
+      <script type="text/javascript">
+        var myVar=setInterval(function(){myTimer()},1000);
+        var i=0;
+        var j=0;
+        var result;
+        function myTimer()
+        {
+        i++;
+        if(i==60)
+        {
+        	i=0;
+        	j++;
+        }
+        if(i<10)
+        	result=j+':0'+i;
+        else
+        	result=j+':'+i;
+        document.getElementById("time").innerHTML=result;
+        }
+    </script>
+  <?php else:?>
+      <?php foreach ($quizes as $quiz):?>
+         <div class="hero-unit span2" style="padding:20px; text-align:center"> 
+              <h3 class="text-info">
+                  <?php echo $quiz->name;?>
+              </h3>
+              <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'startQuiz','id'=>$quiz->course_section_lesson_id,'key'=>$quiz->id));?>" class="btn btn-primary">Start</a>
+          </div>
+      <?php endforeach;?>
+  <?php endif;?>
+  
+</div>
+<div class="row">
+</div>

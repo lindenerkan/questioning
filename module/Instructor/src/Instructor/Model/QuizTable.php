@@ -27,6 +27,22 @@ class QuizTable
         return $resultSet; 
     }
     
+    public function getQuiz($id)
+    {
+        $result = $this->tableGateway->select(array('id'=>$id))->current();
+        return  $result;
+    }
+    
+    public function startQuiz($id)
+    {
+        $this->tableGateway->update(array('is_active'=>'1'),array('id'=>$id));
+    }
+    
+    public function endQuiz($id)
+    {
+    	$this->tableGateway->update(array('is_active'=>NULL),array('id'=>$id));
+    }
+    
     public function createQuiz($lessonId,$quiz)
     {
         $this->jotFormAPI = new JotForm("f5387ebc3c885e25c7a115bc949533e9");
