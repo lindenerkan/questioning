@@ -7,6 +7,8 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
+
+
 namespace Instructor\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -62,6 +64,17 @@ class InstructorController extends AbstractActionController
         }
     }
 
+    public function reportAction()
+    {
+        $results=$this->getQuizTable()->report();
+        
+        foreach ($results as $result)
+        {
+            print_r($result['answers']);
+            echo "<br><br>";
+        }
+    } 
+    
     public function indexAction ()
     {
         if (! $this->zfcUserAuthentication()->hasIdentity()) {

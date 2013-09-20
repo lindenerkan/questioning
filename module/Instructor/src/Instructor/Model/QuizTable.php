@@ -65,6 +65,15 @@ class QuizTable
         }
     }
     
+    public function report()
+    {
+        $this->jotFormAPI = new JotForm("f5387ebc3c885e25c7a115bc949533e9");
+         
+        $submissions = $this->jotFormAPI->getFormSubmissions("32621905483353");
+        
+        return $submissions;
+    }
+    
     public function addQuiz($lessonId,$formId,$name)
     {
         $result=array(
