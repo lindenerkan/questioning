@@ -66,13 +66,49 @@ class InstructorController extends AbstractActionController
 
     public function reportAction()
     {
-        $results=$this->getQuizTable()->report();
+        $submissions=$this->getQuizTable()->report();
         
-        foreach ($results as $result)
+        
+        $q1=array();
+        
+        foreach ($submissions as $submission)
         {
-            print_r($result['answers']);
-            echo "<br><br>";
+            //print_r($submission);
+            foreach ($submission['answers'] as $question)
+            {
+                if($question['type']=="control_radio")
+                {
+                    $q1[]=$question['answer'];
+                }
+            }
         }
+        //print_r($q1);
+        
+        //$ans=array();
+        foreach ($q1 as $q)
+        {
+            if(!isset($ans))
+            {
+                $ans[]=$q;
+                
+            }
+            else 
+            {
+                foreach ($ans as $a)
+                {
+                	if($a==$q)
+                	{
+                
+                	}
+                	else
+                	{
+                		$ans[]=$q;
+                	}
+                }
+            }
+            
+        }
+        print_r($ans);
     } 
     
     public function indexAction ()
