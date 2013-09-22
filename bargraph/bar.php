@@ -5,8 +5,16 @@ require_once ('jpgraph.php');
 require_once ('jpgraph_bar.php');
 
 // We need some data
-$datay=array(10,5,3,8,4,1);
-$datax=array("Jan","Feb","Mar","Apr","May","June");
+//$datay=array(10,5,3,8,4,1);
+//$datax=array("Jan","Feb","Mar","Apr","May","June");
+
+$count=$_GET["count"];
+for ($i=1;$i<=$count;$i++)
+{
+	$datay[]=$_GET["d".$i];
+	$datax[]=$_GET["t".$i];
+}
+
 
 // Setup the graph. 
 $graph = new Graph(400,200);	

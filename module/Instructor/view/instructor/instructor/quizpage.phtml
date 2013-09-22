@@ -36,9 +36,43 @@
               </h3>
               <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'startQuiz','id'=>$quiz->course_section_lesson_id,'key'=>$quiz->id));?>" class="btn btn-primary">Start</a>
           </div>
-      <?php endforeach;?>
+      <?php endforeach;?>  
   <?php endif;?>
   
 </div>
+  <?php if ($report):?>
+  
+  <?php foreach ($report as $chart):?>
+  <?php if($chart['type']=='control_radio'):?>
+  <div class="row span8 affset2">
+      <?php $d=1;?>
+      <img src="../../../../../../bargraph/pie.php?
+      <?php foreach ($chart['values'] as $name=>$value):?>
+          <?php echo "d".$d."=".$value."&";?>
+          <?php echo "t".$d."=".$name."&";?>
+          <?php  $d++;?>
+          <?php endforeach;?>
+          <?php echo "title=".$chart['text'];?>
+          <?php echo "&count=".count($chart['values']);?>"
+           border=0>
+  </div>
+  <?php endif;?>
+  <?php if($chart['type']=='control_checkbox'):?>
+    <div class="row span8 affset2">  
+      <?php $d=1;?>
+      <img src="../../../../../../bargraph/bar.php?
+      <?php foreach ($chart['values'] as $name=>$value):?>
+          <?php echo "d".$d."=".$value."&";?>
+          <?php echo "t".$d."=".$name."&";?>
+          <?php  $d++;?>
+          <?php endforeach;?>
+          <?php echo "title=".$chart['text'];?>
+          <?php echo "&count=".count($chart['values']);?>"
+           border=0>
+  </div>
+  <?php endif;?>
+  <?php endforeach;?>
+      <?php endif;?>
+
 <div class="row">
 </div>

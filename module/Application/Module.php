@@ -69,7 +69,7 @@ class Module
     						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new Users());
-    						return new TableGateway('Users', $dbAdapter, null, $resultSetPrototype);
+    						return new TableGateway('users', $dbAdapter, null, $resultSetPrototype);
     					},
     			)
     	);

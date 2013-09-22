@@ -1,6 +1,7 @@
 <?php
 namespace Instructor\Model;
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Select;
 
 class CourseSectionLessonTable
 {
@@ -16,6 +17,14 @@ class CourseSectionLessonTable
     {
         $resultSet = $this->tableGateway->select();
         return $resultSet;
+    }
+    
+    public function fetchAllx ()
+    {
+    	$resultSet = $this->tableGateway->select(function(Select $select) {
+    	    $select->q;
+    	});
+    	return $resultSet;
     }
     
     public function isActive($id)

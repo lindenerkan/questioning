@@ -26,6 +26,7 @@ use Instructor\Model\CourseSection;
 use Instructor\Model\CourseSectionTable;
 use Instructor\Form;
 use Instructor\Model\CourseSectionLesson;
+use Instructor\Model\JotForm;
 
 class InstructorController extends AbstractActionController
 {
@@ -64,52 +65,6 @@ class InstructorController extends AbstractActionController
         }
     }
 
-    public function reportAction()
-    {
-        $submissions=$this->getQuizTable()->report();
-        
-        
-        $q1=array();
-        
-        foreach ($submissions as $submission)
-        {
-            //print_r($submission);
-            foreach ($submission['answers'] as $question)
-            {
-                if($question['type']=="control_radio")
-                {
-                    $q1[]=$question['answer'];
-                }
-            }
-        }
-        //print_r($q1);
-        
-        //$ans=array();
-        foreach ($q1 as $q)
-        {
-            if(!isset($ans))
-            {
-                $ans[]=$q;
-                
-            }
-            else 
-            {
-                foreach ($ans as $a)
-                {
-                	if($a==$q)
-                	{
-                
-                	}
-                	else
-                	{
-                		$ans[]=$q;
-                	}
-                }
-            }
-            
-        }
-        print_r($ans);
-    } 
     
     public function indexAction ()
     {
@@ -492,17 +447,27 @@ class InstructorController extends AbstractActionController
     {
         $lessonId = (int) $this->params()->fromRoute('id', 0);
         $quiz = (int) $this->params()->fromRoute('key', 0);
+        $form = (int) $this->params()->fromRoute('form', 0);
+        
         
         if($quiz)
         {
             $quiz=$this->getQuizTable()->getQuiz($quiz);
         }
         
+        if($form)
+        {
+            $form_id=$this->getQuizTable()->getQuiz($form)->form_id;
+            $report=$this->getQuizTable()->report($form_id);
+        }
+        else $report=false;
+        
         $quizes=$this->getQuizTable()->getLessonQuizes($lessonId);
         
         return array(
             'quizes'     => $quizes,
-            'settedQuiz' => $quiz
+            'settedQuiz' => $quiz,
+            'report'     => $report
         );
     }
     
@@ -533,7 +498,7 @@ class InstructorController extends AbstractActionController
     		unlink($myFile);
     
     	$this->getQuizTable()->endQuiz($quizId);
-    	$this->redirect()->toRoute('instructor/default', array('controller'=>'instructor','action' => 'quizpage','id'=>$lessonId));
+    	$this->redirect()->toRoute('instructor/default', array('controller'=>'instructor','action' => 'quizpage','id'=>$lessonId,'key'=>0,'form'=>$quizId));
     }
     
     public function endlessonAction()

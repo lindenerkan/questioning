@@ -45,7 +45,7 @@
                         </ul>
                         
                         <?php if(!$this->zfcUserIdentity()): ?>
-                <form class="navbar-form pull-right" method="post" action="<?php echo $this->url('zfcuser/login', array('locale' => \Locale::getDefault())) ?>">
+                <form class="navbar-form pull-right" method="post" action="<?php echo $this->url('zfcuser/login') ?>">
                     <input class="span2" type="text" name="identity" placeholder="<?php echo $this->translate('E-mail') ?>">
                     <input class="span2" type="password" name="credential" placeholder="<?php echo $this->translate('Password') ?>">
                     <button type="submit" class="btn"><?php echo $this->translate('Sign In') ?></button>
@@ -55,10 +55,10 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $this->zfcUserIdentity()->getDisplayName() ?> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                          <li><a href="<?php echo $this->url('application/changepassword', array('locale' => \Locale::getDefault())) ?>"><?php echo $this->translate('Change Password') ?></a></li>
+                          <li><a href="<?php echo $this->url('application/changepassword') ?>"><?php echo $this->translate('Change Password') ?></a></li>
                           <li><a href="<?php echo $this->url('application/changedisplayname', array()) ?>"><?php echo $this->translate('Change Display Name') ?></a></li>
                           <li class="divider"></li>
-                          <li><a href="<?php echo $this->url('zfcuser/logout', array('locale' => \Locale::getDefault())) ?>"><?php echo $this->translate('Logout') ?></a></li>
+                          <li><a href="<?php echo $this->url('zfcuser/logout') ?>"><?php echo $this->translate('Logout') ?></a></li>
                         </ul>
                     </li>
                 </ul>

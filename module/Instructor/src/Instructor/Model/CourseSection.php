@@ -1,5 +1,6 @@
 <?php
 namespace Instructor\Model;
+
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
@@ -12,7 +13,7 @@ class CourseSection
     public $course_id;
 
     public $instructor_id;
-    
+
     public $name;
 
     protected $inputFilter;
@@ -42,30 +43,28 @@ class CourseSection
             $this->inputFilter = new InputFilter();
             $factory = new InputFactory();
             
-            $this->inputFilter->add(
-            		$factory->createInput(
-            				array(
-            						'name' => 'name',
-            						'required' => true,
-            						'filters' => array(
-            								array(
-            										'name' => 'StripTags'
-            								),
-            								array(
-            										'name' => 'StringTrim'
-            								)
-            						),
-            						'validators' => array(
-            								array(
-            										'name' => 'StringLength',
-            										'options' => array(
-            												'encoding' => 'UTF-8',
-            												'min' => 0,
-            												'max' => 128
-            										)
-            								)
-            						)
-            				)));
+            $this->inputFilter->add($factory->createInput(array(
+                'name' => 'name',
+                'required' => true,
+                'filters' => array(
+                    array(
+                        'name' => 'StripTags'
+                    ),
+                    array(
+                        'name' => 'StringTrim'
+                    )
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min' => 0,
+                            'max' => 128
+                        )
+                    )
+                )
+            )));
             
             $this->inputFilter->add($factory->createInput(array(
                 'name' => 'id',
@@ -76,25 +75,25 @@ class CourseSection
                     )
                 )
             )));
-
+            
             $this->inputFilter->add($factory->createInput(array(
-            		'name' => 'course_id',
-            		'required' => true,
-            		'filters' => array(
-            				array(
-            						'name' => 'Int'
-            				)
-            		)
+                'name' => 'course_id',
+                'required' => true,
+                'filters' => array(
+                    array(
+                        'name' => 'Int'
+                    )
+                )
             )));
-           
+            
             $this->inputFilter->add($factory->createInput(array(
-            		'name' => 'instructor_id',
-            		'required' => true,
-            		'filters' => array(
-            				array(
-            						'name' => 'Int'
-            				)
-            		)
+                'name' => 'instructor_id',
+                'required' => true,
+                'filters' => array(
+                    array(
+                        'name' => 'Int'
+                    )
+                )
             )));
             
             $this->inputFilter = $inputFilter;

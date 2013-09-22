@@ -65,13 +65,85 @@ class QuizTable
         }
     }
     
-    public function report()
+    public function report($formID)
     {
         $this->jotFormAPI = new JotForm("f5387ebc3c885e25c7a115bc949533e9");
          
-        $submissions = $this->jotFormAPI->getFormSubmissions("32621905483353");
+        //$formID="32621905483353";
+        $submissions = $this->jotFormAPI->getFormSubmissions($formID);
         
-        return $submissions;
+        $questions = $this->jotFormAPI->getFormQuestions($formID);
+        
+        
+        $result=array();
+        foreach ($questions as $question)
+        {
+            if($question['type']!='control_button')
+            {
+                //print_r($question);
+                $result[$question['qid']]['type']=$question['type'];
+                $result[$question['qid']]['text']=$question['text'];
+                
+                if($question['type']=='control_radio')
+                {
+                    $result[$question['qid']]['options']=(explode('|', $question['options']));
+                    $result[$question['qid']]['values']=array();
+                    
+                    foreach ($result[$question['qid']]['options'] as $optionkey=>$option)
+                    {
+                        $result[$question['qid']]['values'][$option]=0;
+                    }
+                    
+                    foreach ($submissions as $submission)
+                    {
+                        foreach ($result[$question['qid']]['options'] as $optionkey=>$option)
+                        {
+                            if($option==$submission['answers'][$question['qid']]['answer'])
+                            {
+                                $result[$question['qid']]['values'][$option]++;
+                            }
+                        }
+                    }
+                }
+                else if($question['type']=="control_checkbox")
+                {
+                    $result[$question['qid']]['options']=(explode('|', $question['options']));
+                    $result[$question['qid']]['values']=array();
+                    
+                    foreach ($result[$question['qid']]['options'] as $optionkey=>$option)
+                    {
+                    	$result[$question['qid']]['values'][$option]=0;
+                    }
+                    
+                    foreach ($submissions as $submission)
+                    {
+                    	foreach ($result[$question['qid']]['options'] as $optionkey=>$option)
+                    	{
+                    	    if(isset($submission['answers'][$question['qid']]['answer']))
+                    	    {
+                    	        foreach ($submission['answers'][$question['qid']]['answer'] as $answer)
+                    	        {
+                    	        	if($option==$answer)
+                    	        	{
+                    	        		$result[$question['qid']]['values'][$option]++;
+                    	        	}
+                    	        }
+                    	    }
+                    	}
+                    }
+                }
+
+            }
+        }
+        /*
+        foreach ($result as $r)
+        {
+            print_r($r);
+            echo "<br><br>";
+        }
+        */
+        return $result;
+        
     }
     
     public function addQuiz($lessonId,$formId,$name)

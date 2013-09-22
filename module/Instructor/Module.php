@@ -81,7 +81,7 @@ class Module
     						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new Course());
-    						return new TableGateway('Course', $dbAdapter, null, $resultSetPrototype);
+    						return new TableGateway('course', $dbAdapter, null, $resultSetPrototype);
     					},
     					'Instructor\Model\CourseSectionTable' => function  ($sm)
     					{
@@ -94,7 +94,7 @@ class Module
     						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new CourseSection());
-    						return new TableGateway('Course_section', $dbAdapter, null, $resultSetPrototype);
+    						return new TableGateway('course_section', $dbAdapter, null, $resultSetPrototype);
     					},
     					'Instructor\Model\CourseSectionLessonTable' => function  ($sm)
     					{
@@ -107,7 +107,7 @@ class Module
     						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new CourseSectionLesson());
-    						return new TableGateway('Course_section_lesson', $dbAdapter, null, $resultSetPrototype);
+    						return new TableGateway('course_section_lesson', $dbAdapter, null, $resultSetPrototype);
     					},
     					'Instructor\Model\StudentTable' => function  ($sm)
     					{
@@ -133,7 +133,7 @@ class Module
     						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new StudentSection());
-    						return new TableGateway('Student_section', $dbAdapter, null, $resultSetPrototype);
+    						return new TableGateway('student_section', $dbAdapter, null, $resultSetPrototype);
     					},
     					'Instructor\Model\QuizTable' => function  ($sm)
     					{

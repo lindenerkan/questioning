@@ -6,7 +6,7 @@ $dbParams = array(
     //'hostname'  => 'localhost',
     'database'  => 'questioning',
     'username'  => 'root',
-    'password'  => '',
+    'password'  => '12548442',
     'hostname'  => 'localhost',
 );
 
