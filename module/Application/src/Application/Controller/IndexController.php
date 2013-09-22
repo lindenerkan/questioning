@@ -47,14 +47,30 @@ class IndexController extends AbstractActionController
             ));
         }
         
-        if ($this->zfcUserAuthentication()->getIdentity()->getAdmin()) {
+        if ($this->zfcUserAuthentication()->getIdentity()->getAdmin()==1) {
         	return $this->redirect()->toRoute('instructor', array());
         }
+        elseif ($this->zfcUserAuthentication()->getIdentity()->getAdmin()==2)
+            echo $this->zfcUserAuthentication()->getIdentity()->getAdmin();       
         else 
             return $this->redirect()->toRoute('student', array());
         
         return array(
         );
+    }
+    
+    public function makeadminAction()
+    {
+        $id=$this->zfcUserAuthentication()->getIdentity()->getId();
+        $this->getUsersTable()->makeAdmin($id);
+        return $this->redirect()->toRoute('instructor/default', array('controller'=>'instructor','action' => 'index'));
+    }
+    
+    public function makestudentAction()
+    {
+    	$id=$this->zfcUserAuthentication()->getIdentity()->getId();
+    	$this->getUsersTable()->makeStudent($id);
+    	return $this->redirect()->toRoute('student/default', array('controller'=>'student','action' => 'index'));
     }
     
     public function changedisplaynameAction()

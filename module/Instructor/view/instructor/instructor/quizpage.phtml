@@ -43,8 +43,11 @@
   <?php if ($report):?>
   
   <?php foreach ($report as $chart):?>
-  <?php if($chart['type']=='control_radio'):?>
-  <div class="row span8 affset2">
+  <?php if($chart['type']=='control_head'):?>
+      
+  <?php elseif($chart['type']=='control_radio' ||$chart['type']=='control_dropdown'):?>
+  <div class="row span8 offset2" style="margin-top:20px">
+      <?php if (isset($chart['values'])):?>
       <?php $d=1;?>
       <img src="../../../../../../bargraph/pie.php?
       <?php foreach ($chart['values'] as $name=>$value):?>
@@ -55,10 +58,10 @@
           <?php echo "title=".$chart['text'];?>
           <?php echo "&count=".count($chart['values']);?>"
            border=0>
+       <?php endif;?>
   </div>
-  <?php endif;?>
-  <?php if($chart['type']=='control_checkbox'):?>
-    <div class="row span8 affset2">  
+  <?php elseif($chart['type']=='control_checkbox'):?>
+    <div class="row span8 offset2" style="margin-top:50px">  
       <?php $d=1;?>
       <img src="../../../../../../bargraph/bar.php?
       <?php foreach ($chart['values'] as $name=>$value):?>
@@ -70,6 +73,26 @@
           <?php echo "&count=".count($chart['values']);?>"
            border=0>
   </div>
+  <?php elseif(isset($chart)):?>
+      <?php $d=1;?>
+      <div class="row span8 offset2" style="margin-top:50px">
+      <h2 style="color:#3F5666;"><?php echo $chart['text'];?></h2>
+      <table class="table">
+          <tr>
+              <th>#</th>
+              <th>Answer</th>
+          </tr>
+          <?php if (isset($chart['values'])):?>
+          <?php foreach ($chart['values'] as $name=>$value):?>
+          <tr>
+              <td><?php echo $d;?></td>
+              <td><?php echo $value?></td>
+          <?php  $d++;?>
+          </tr>
+          <?php endforeach;?>
+          <?php endif;?>
+      </table>
+      </div>
   <?php endif;?>
   <?php endforeach;?>
       <?php endif;?>

@@ -19,6 +19,16 @@ class UsersTable
         return $resultSet;
     }
     
+    public function makeAdmin($id)
+    {
+        $this->tableGateway->update(array('admin'=>"1"), array('id' => $id));
+    }
+    
+    public function makeStudent($id)
+    {
+    	$this->tableGateway->update(array('admin'=>"0"), array('id' => $id));
+    }
+    
     public function getRow($id)
     {
         $resultSet = $this->tableGateway->select(array('id' => $id))->current();

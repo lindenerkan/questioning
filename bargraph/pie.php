@@ -24,7 +24,7 @@ $graph->SetShadow();
 // Set A title for the plot
 $graph->title->Set($_GET["title"]);
 $graph->title->SetFont(FF_VERDANA,FS_BOLD,18); 
-$graph->title->SetColor("darkblue");
+$graph->title->SetColor("#3F5666");
 $graph->legend->Pos(0.3,0.9);
 
 // Create 3D pie plot

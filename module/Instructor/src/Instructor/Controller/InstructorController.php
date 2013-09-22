@@ -396,7 +396,7 @@ class InstructorController extends AbstractActionController
             {
                 $text="<div class=\"row span6\">
                 <div class=\"alert alert-success\">
-                    <a href=\""."http://localhost/OnlineQuestioning/public/index.php/instructor/instructor/questionRespond/".$courseSectionLessonId."/".$question->id."\" class=\"close\" data-dismiss=\"alert\">&times;</a>
+                    <a href=\""."http://82.196.1.215/public/index.php/instructor/instructor/questionRespond/".$courseSectionLessonId."/".$question->id."\" class=\"close\" data-dismiss=\"alert\">&times;</a>
                         <h4>".$question->name."</h4>
                             <span>".$question->value."</span>
                                 </div></div>";

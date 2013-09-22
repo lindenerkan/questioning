@@ -144,20 +144,25 @@ class StudentController extends AbstractActionController
             		    $name=$this->zfcUserAuthentication()->getIdentity()->getUsername();
             		
             		
+                    
             		
-            		$myFile = "log.html";
-            		$fh = fopen($myFile, 'r');
-            		$theData = fread($fh, filesize($myFile));
-            		fclose($fh);
-            		
-            		$myFile = "log.html";
-            		unlink($myFile);
+            		if(is_executable("log.html"))
+            		{
+            		    $myFile = "log.html";
+            		    $fh = fopen($myFile, 'r');
+            		    $theData = fread($fh, filesize($myFile));
+            		    unlink($myFile);
+            		    fclose($fh);
+            		}
+            		else $theData="";
+
+
             		
             		$id=$this->getStudentQuestionTable()->askQuestion($data,$studentId,$name);
             		
             		$text="<div class=\"row span6\">
                     <div class=\"alert alert-success\">
-                    <a href=\""."http://localhost/OnlineQuestioning/public/index.php/instructor/instructor/questionRespond/".$lessonId."/".$id."\" class=\"close\" data-dismiss=\"alert\">&times;</a>
+                    <a href=\""."http://82.196.1.215/public/index.php/instructor/instructor/questionRespond/".$lessonId."/".$id."\" class=\"close\" data-dismiss=\"alert\">&times;</a>
                         <h4>".$name."</h4>
                             <span>".$data['value']."</span>
                                 </div></div>".$theData;

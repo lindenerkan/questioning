@@ -78,13 +78,13 @@ class QuizTable
         $result=array();
         foreach ($questions as $question)
         {
-            if($question['type']!='control_button')
+            if($question['type']!='control_button' && $question['type']!='control_pagebreak' && $question['type']!='control_fileupload' && $question['type']!='control_collapse' && $question['type']!='control_text' && $question['type']!='control_hidden' && $question['type']!='control_autoincrement' && $question['type']!='control_captcha' && $question['type']!='control_image' && $question['type']!='control_head')
             {
                 //print_r($question);
                 $result[$question['qid']]['type']=$question['type'];
                 $result[$question['qid']]['text']=$question['text'];
                 
-                if($question['type']=='control_radio')
+                if($question['type']=='control_radio' ||$question['type']=='control_dropdown')
                 {
                     $result[$question['qid']]['options']=(explode('|', $question['options']));
                     $result[$question['qid']]['values']=array();
@@ -132,7 +132,26 @@ class QuizTable
                     	}
                     }
                 }
-
+                else
+                {
+                	$result[$question['qid']]['values']=array();
+                
+                	foreach ($submissions as $submission)
+                	{
+                	    if(isset($submission['answers'][$question['qid']]['prettyFormat']))
+						$result[$question['qid']]['values'][]=$submission['answers'][$question['qid']]['prettyFormat'];
+                	    else 
+                	        $result[$question['qid']]['values'][]=$submission['answers'][$question['qid']]['answer'];
+                	}
+                }
+               /* else if($question['type']=="control_fullname" || $question['type']=="control_phone" || $question['type']=="control_datetime" || $question['type']=="control_time")
+                {
+                    $result[$question['qid']]['values']=array();
+                    foreach ($submissions as $submission)
+                    {
+            			$result[$question['qid']]['values'][]=$submission['answers'][$question['qid']]['answer'];
+                    }   
+                }*/
             }
         }
         /*
