@@ -25,7 +25,7 @@ class ChangeDisplayNameForm extends Form
     {
         // display name Input
         $text = new Element\Text('displayname');
-        $text->setLabel('Display Name');
+        $text->setLabel('Nick Name');
         $this->add($text);
     }
 

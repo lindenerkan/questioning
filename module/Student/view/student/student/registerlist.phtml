@@ -1,4 +1,5 @@
 <div class="hero-unit" style="background-color:rgba(207, 207, 207, 0.23);">
+    <?php if(isset($courses)):?>
     <?php foreach ($courses as $c=>$course):?>
     <?php $registered=null;?>
     <?php foreach ($course['sections'] as $r)
@@ -40,4 +41,7 @@
         </div>
     <?php }?>
     <?php endforeach;?>
+    <?php else:?>
+    <h3 class="text-warning">Three is no course which you can register!</h3>
+    <?php endif;?>
 </div>

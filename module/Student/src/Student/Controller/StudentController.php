@@ -136,7 +136,7 @@ class StudentController extends AbstractActionController
             		$data = $form->getData();
             		$quiz->exchangeArray($data);
             		
-            		if($data['name'])
+            		if(!$data['name'])
             		{
             		    $name=$this->zfcUserAuthentication()->getIdentity()->getDisplayName();
             		}

@@ -35,7 +35,7 @@ class Base extends ProvidesEventsForm
         $this->add(array(
             'name' => 'display_name',
             'options' => array(
-                'label' => 'Display Name',
+                'label' => 'Nick Name',
             ),
             'attributes' => array(
                 'type' => 'text'

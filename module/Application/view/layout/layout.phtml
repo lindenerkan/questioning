@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         
-        <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?php echo $this->headTitle(''. $this->translate('EduBox'))->setSeparator(' - ')->setAutoEscape(false) ?>
 
         <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
 
@@ -33,7 +33,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Online Questioning') ?></a>
+                    <a class="brand" href="<?php echo $this->url('home') ?>"><?php echo $this->translate('EduBox') ?></a>
                     <div class="nav-collapse collapse">
                         <ul class="nav">
                             <li><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
@@ -56,7 +56,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $this->zfcUserIdentity()->getDisplayName() ?> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                           <li><a href="<?php echo $this->url('application/changepassword') ?>"><?php echo $this->translate('Change Password') ?></a></li>
-                          <li><a href="<?php echo $this->url('application/changedisplayname', array()) ?>"><?php echo $this->translate('Change Display Name') ?></a></li>
+                          <li><a href="<?php echo $this->url('application/changedisplayname', array()) ?>"><?php echo $this->translate('Change Nick Name') ?></a></li>
                           <li class="divider"></li>
                           <li><a href="<?php echo $this->url('zfcuser/logout') ?>"><?php echo $this->translate('Logout') ?></a></li>
                         </ul>

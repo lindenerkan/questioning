@@ -38,7 +38,7 @@ class AskQuestionForm extends Form
              'type' => 'Zend\Form\Element\Checkbox',
              'name' => 'name',
              'options' => array(
-                     'label' => 'Use Display Name',
+                     'label' => 'Use my real name',
                      'use_hidden_element' => true,
                      'checked_value' => '1',
                      'unchecked_value' => '0'

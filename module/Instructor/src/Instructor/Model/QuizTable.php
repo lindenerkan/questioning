@@ -45,7 +45,7 @@ class QuizTable
     
     public function createQuiz($lessonId,$quiz)
     {
-        $this->jotFormAPI = new JotForm("f5387ebc3c885e25c7a115bc949533e9");
+        $this->jotFormAPI = new JotForm("c890d0436c8066c2a57e3d47904e1e20");
         $name=$quiz->name;
         $quiz = array(
         		'questions' => array(),
@@ -67,7 +67,7 @@ class QuizTable
     
     public function report($formID)
     {
-        $this->jotFormAPI = new JotForm("f5387ebc3c885e25c7a115bc949533e9");
+        $this->jotFormAPI = new JotForm("c890d0436c8066c2a57e3d47904e1e20");
          
         //$formID="32621905483353";
         $submissions = $this->jotFormAPI->getFormSubmissions($formID);

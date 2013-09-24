@@ -1,6 +1,7 @@
 <div class="row">
 <div class="span5">
 <div class="hero-unit">
+<?php if ($courses):?>
 <?php foreach ($courses as $course):?>
     <?php if($course['sections']):?>
     <div class="row" style="margin-bottom:10px;">
@@ -42,6 +43,9 @@
     
     <?php endif;?>
 <?php endforeach;?>
+<?php else:?>
+<h4 class="text-warning">You do not have any course/course section. You can add your courses under <a href="../panel">Panel page</a>.</h4>
+<?php endif;?>
 </div>
 </div>
 </div>

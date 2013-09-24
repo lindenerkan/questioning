@@ -1,4 +1,5 @@
-<div class="hero-unit">
+<div class="hero-unit span4" style="padding-bottom:20px">
+
 <?php foreach ($quizes as $quiz){?>
     <div class="row">
         <span class="text-info"><?php echo $quiz->name;?></span>
@@ -8,6 +9,7 @@
     </div>
 <?php }?>
 
+<div class="row"><span class="text-info">If additional login required</span><span class="text-warning"> in this page</span><span class="text-info">;<br>Username: onlinequestioning<br>Pass: SSfUfZ20</span></div>
 
 <?php
 // Init Form
@@ -22,6 +24,7 @@ $errorsHelper
     ->setMessageSeparatorString('</div><div class="help-block">')
     ->setMessageCloseString('</div>');
 ?>
+<div class="row" style="padding-top:40px">
 <?php echo $this->form()->openTag($form); ?>
 <fieldset>
     
@@ -32,8 +35,8 @@ $errorsHelper
     $errorClass = (!empty($errors)) ? ' error' : '';
     ?>
     <div class="control-group<?php echo $errorClass ?>">
-        <?php echo $this->formLabel($elem); ?>
-        <div class="controls">
+        <?php// echo $this->formLabel($elem); ?>
+    <div class="controls" style="margin: auto">
             <?php echo $this->formText($elem); ?>
             <?php echo $errorsHelper($elem); ?>
             <button class="btn btn-primary btn-small">Create Quiz</button>
@@ -43,7 +46,12 @@ $errorsHelper
 
 </fieldset>
 <?php echo $this->form()->closeTag($form); ?>
-</div>
+</div></div>
+<div class="row"></div>
+
+<script type="text/javascript">
+$("input[name='name']").attr("placeholder","Quiz name");
+</script>
 
 <script type="text/javascript">
 //var $j = jQuery.noConflict();
@@ -53,7 +61,8 @@ $(document).ready(function(){
 JF.initialize({
     enableCookieAuth : true, 
     appName: "Online Questioning",
-    accessType: 'full'
+    accessType: 'full',
+    //apiKey:"c890d0436c8066c2a57e3d47904e1e20"
 });
 $('.form_edit').click(function(e) {
 	var formID = $(this).attr('id');
