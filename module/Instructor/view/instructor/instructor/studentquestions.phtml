@@ -1,0 +1,148 @@
+<?php $n=0;?>
+<div class="hero-unit">
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Student</th>
+            <th>Question</th>
+            <th>Answer</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($questions as $n=>$question){?>
+    <?php //print_r($question);?>
+        <?php $n++;?>
+        <tr>
+            <td><?php echo $n; ?></td>
+            <td><?php echo $question->name; ?></td>
+            <td><?php echo $question->value; ?></td>
+            <td><?php echo $question->answer; ?></td>
+            <td>
+                <div class="dropdown">
+                    <a data-toggle="dropdown" href="#" class="btn">Options <span class="caret" style="margin-top:5px"> </span></a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li><a href="#addAnswer<?php echo $question->id?>" data-toggle="modal">Answer Question</a></li>
+                        <!-- <li><a href="#send<?php //echo $question->id?>" data-toggle="modal">Send</a></li> -->
+                        <li><a href="#delete<?php echo $question->id?>" data-toggle="modal">Delete Question</a></li>
+                    </ul>
+                </div>
+                
+                
+                
+                <!-- send question modal -->
+                <div id="send<?php echo $question->id?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3>Send Qustion and Answer</h3>
+                  </div>
+                  <div class="modal-body">
+                    <p>Question: <?php echo $question->value?></p>
+                    <p>Answer: <?php echo $question->answer?></p>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="#" class="btn">Close</a>
+                    <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'sendquestion','id'=>$lessonId,'key'=>$question->id));?>" class="btn btn-primary">Send the Student</a>
+                    <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'sendquestion','id'=>$lessonId,'key'=>$question->id,'form'=>'1'));?>" class="btn btn-primary">Send all Students</a>
+                  
+                  </div>
+                </div>
+                <!-- send question modal sonu-->
+                
+                
+                
+                <!-- delete question modal -->
+                <div id="delete<?php echo $question->id?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3>Delete</h3>
+                  </div>
+                  <div class="modal-body">
+                    <p>Are you sure you want to delete question?</p>
+                    <p><?php echo $question->value?></p>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="#" class="btn">Close</a>
+                    <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'deletequestion','id'=>$lessonId,'key'=>$question->id));?>" class="btn btn-primary">Delete</a>
+                  </div>
+                </div>
+                <!-- delete question modal sonu-->
+                
+                <!-- add answer modal -->
+        <div id="addAnswer<?php echo $question->id?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel">Answer</h3>
+                      </div>
+                      <div class="modal-body">
+                        <p><?php echo $question->value?></p>
+                        <?php
+                            // Init Form
+                            $form = $this->answerform;
+                            $form->setAttribute('class', 'form-horizontal');
+                            $form->prepare();
+                            
+                            // Configure Errors Helper
+                            $errorsHelper  = $this->plugin('formelementerrors');
+                            $errorsHelper
+                                ->setMessageOpenFormat('<div class="help-block">')
+                                ->setMessageSeparatorString('</div><div class="help-block">')
+                                ->setMessageCloseString('</div>');
+                            ?>
+                            <?php echo $this->form()->openTag($form); ?>
+                            <fieldset>
+                                
+                                
+                                <?php
+                                $elem = $form->get('id');
+                                $elem->setValue($question->id);
+                                $elem->setLabelAttributes(array('class' => 'control-label'));
+                                $errors = $elem->getMessages();
+                                $errorClass = (!empty($errors)) ? ' error' : '';
+                                ?>
+                                <div class="control-group<?php echo $errorClass ?>">
+                                    <div class="controls">
+                                        <?php echo $this->formHidden($elem); ?>
+                                        <?php echo $errorsHelper($elem); ?>
+                                    </div>
+                                </div>
+                                
+                                
+                                <?php
+                                $elem = $form->get('answer');
+                                $elem->setValue($question->answer);
+                                $elem->setLabelAttributes(array('class' => 'control-label'));
+                                $errors = $elem->getMessages();
+                                $errorClass = (!empty($errors)) ? ' error' : '';
+                                ?>
+                                <div class="control-group<?php echo $errorClass ?>">
+                                    <?php echo $this->formLabel($elem); ?>
+                                    <div class="controls">
+                                        <?php echo $this->formTextarea($elem); ?>
+                                        <?php echo $errorsHelper($elem); ?>
+                                        <button class="btn btn-primary btn-small">Answer</button>
+                                    </div>
+                                </div>
+                            
+                            
+                            </fieldset>
+                            <?php echo $this->form()->closeTag($form); ?>
+                        
+                      </div>
+                      <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <!--  <a href="<?php //echo $this->url('instructor/default', array('controller'=>'instructor','action' => 'addsection','id'=>$course['id']));?>" class="btn btn-info btn-small">Add Section</a>-->
+                      </div>
+                    </div>
+        <!-- add answer modal sonu -->
+                
+                
+                
+                
+            </td>
+        </tr>
+    <?php } ?>
+    </tbody>
+</table>
+</div>

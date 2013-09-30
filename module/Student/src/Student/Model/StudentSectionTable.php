@@ -24,6 +24,12 @@ class StudentSectionTable
         return $resultSet;
     }
     
+    public function getStudentActiveSections($student_id)
+    {
+    	$resultSet = $this->tableGateway->select(array('student_id'=>$student_id,'is_active'=>'1'));
+    	return $resultSet;
+    }
+    
     public function getIsStudentActive($id)
     {
         $result = $this->tableGateway->select(array('id'=>$id))->current()->is_active;

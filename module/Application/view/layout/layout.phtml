@@ -40,6 +40,8 @@
                             <?php if($this->zfcUserIdentity()): ?>
                                 <?php if($this->zfcUserIdentity()->getAdmin()): ?>
                                     <li><a href="<?php echo $this->url('instructor/panel') ?>"><?php echo $this->translate('Panel') ?></a></li>
+                                <?php else:?>
+                                    <li><a href="<?php echo $this->url('student/panel') ?>"><?php echo $this->translate('Panel') ?></a></li>
                                 <?php endif ?>
                             <?php endif ?>
                         </ul>

@@ -26,6 +26,12 @@ class StudentQuestionTable
             return 0;
     }
     
+    public function getLessonQuestions($lesson_id)
+    {
+        $resultSet = $this->tableGateway->select(array('course_section_lesson_id'=>$lesson_id));
+        return $resultSet;
+    }
+    
     public function getActiveQuestions($lesson_id)
     {
         $resultSet = $this->tableGateway->select(array('course_section_lesson_id'=>$lesson_id, 'is_active'=>'1'));
@@ -36,6 +42,16 @@ class StudentQuestionTable
     {
     	$resultSet = $this->tableGateway->select(array('course_section_lesson_id'=>$lesson_id, 'is_active'=>'0'));
     	return $resultSet;
+    }
+    
+    public function addAnswer($data)
+    {
+    	$this->tableGateway->update(array('answer'=>$data['answer']),array('id'=>$data['id']));
+    }
+    
+    public function deleteQuestion($id)
+    {
+        $this->tableGateway->delete(array('id'=>$id));
     }
     
     public function questionRespond($id)

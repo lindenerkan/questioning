@@ -1,5 +1,6 @@
 <?php
 namespace Instructor\Model;
+
 use Zend\Db\TableGateway\TableGateway;
 
 class CourseTable
@@ -17,52 +18,61 @@ class CourseTable
         $resultSet = $this->tableGateway->select();
         return $resultSet;
     }
-    
-    public function getCourseID($code,$name)
+
+    public function getCourseID ($code, $name)
     {
-        $result= $this->tableGateway->select(array('code'=>$code,'name'=>$name))->current()->id;
+        $result = $this->tableGateway->select(array(
+            'code' => $code,
+            'name' => $name
+        ))->current()->id;
         return $result;
     }
-    
-    public function getCourse($id)
+
+    public function getCourse ($id)
     {
-    	$result= $this->tableGateway->select(array('id'=>$id))->current();
-    	return $result;
+        $result = $this->tableGateway->select(array(
+            'id' => $id
+        ))->current();
+        return $result;
     }
-    
-    public function verifyCourseCode($code)
+
+    public function verifyCourseCode ($code)
     {
-        $result=$this->tableGateway->select(array('code'=>$code))->current();
-    	if(!$result)
+        $result = $this->tableGateway->select(array(
+            'code' => $code
+        ))->current();
+        if (! $result)
             return true;
     }
-    
-    public function addCourse($data)
+
+    public function addCourse ($data)
     {
-        $result=array(
-            'code'=>$data->code,
-            'name'=>$data->name
+        $result = array(
+            'code' => $data->code,
+            'name' => $data->name
         );
-        if($this->verifyCourseCode($result['code']))
-        {
-            if($this->tableGateway->insert($result))
-            {
+        if ($this->verifyCourseCode($result['code'])) {
+            if ($this->tableGateway->insert($result)) {
                 return $this->getCourseID($result['code'], $result['name']);
-            }   	
+            }
         }
     }
-    
-    public function updateCourse($data)
+
+    public function updateCourse ($data)
     {
-    	$result=array(
-    			'code'=>$data->code,
-    			'name'=>$data->name
-    	);
-		$this->tableGateway->update($result,array('id'=>$data->id));
+        $result = array(
+            'code' => $data->code,
+            'name' => $data->name
+        );
+        $this->tableGateway->update($result, array(
+            'id' => $data->id
+        ));
     }
-    
-    public function deleteCourse($courseId)
+
+    public function deleteCourse ($courseId)
     {
-    	$this->tableGateway->delete(array('id' => $courseId));
+        $this->tableGateway->delete(array(
+            'id' => $courseId
+        ));
     }
 }

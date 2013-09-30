@@ -43,6 +43,9 @@
   <?php if ($report):?>
   
   <?php foreach ($report as $chart):?>
+  <?php 
+//print_r($chart);
+//echo count($chart['values']);?>
   <?php if($chart['type']=='control_head'):?>
       
   <?php elseif($chart['type']=='control_radio' ||$chart['type']=='control_dropdown'):?>

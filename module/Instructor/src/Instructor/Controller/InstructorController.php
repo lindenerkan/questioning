@@ -27,6 +27,7 @@ use Instructor\Model\CourseSectionTable;
 use Instructor\Form;
 use Instructor\Model\CourseSectionLesson;
 use Instructor\Model\JotForm;
+use Zend\Mail;
 
 class InstructorController extends AbstractActionController
 {
@@ -119,34 +120,51 @@ class InstructorController extends AbstractActionController
     {
         $instructorId=$this->zfcUserAuthentication()->getIdentity()->getId();
         
-        $result=array(
-            
-        );
+        $result=array();
+
         
         $courses=$this->getCourseTable()->getCourses();
+        
+        
         foreach ($courses as $key=>$course)
         {
+            $sections=$this->getCourseSectionTable()->getSections($course->id,$instructorId);
             $result[$key]['id']=$course->id;
             $result[$key]['code']=$course->code;
             $result[$key]['name']=$course->name;
             $result[$key]['sections']=array();
             
-            $sections=$this->getCourseSectionTable()->getSections($course->id,$instructorId);
-    	    foreach ($sections as $k=>$section)
-    	    {
-    	        $result[$key]['sections'][$k]['id']=$section->id;
-    	        $result[$key]['sections'][$k]['name']=$section->name;
-    	        $result[$key]['sections'][$k]['lessons']=array();
-    	        $lessons=$this->getCourseSectionLessonTable()->getLessons($section->id);
-    	        
-    	        foreach ($lessons as $i=>$lesson)
-    	        {
-    	            $result[$key]['sections'][$k]['lessons'][$i]['id']=$lesson->id;
-    	            $result[$key]['sections'][$k]['lessons'][$i]['name']=$lesson->name;
-    	        }
-    	        
-    	    }   
+            
+            foreach ($sections as $k=>$section)
+            {
+            	$result[$key]['sections'][$k]['id']=$section->id;
+            	$result[$key]['sections'][$k]['name']=$section->name;
+            	$result[$key]['sections'][$k]['instructorId']=$section->instructor_id;
+            	$result[$key]['sections'][$k]['lessons']=array();
+            	$lessons=$this->getCourseSectionLessonTable()->getLessons($section->id);
+            	 
+            	foreach ($lessons as $i=>$lesson)
+            	{
+            		$result[$key]['sections'][$k]['lessons'][$i]['id']=$lesson->id;
+            		$result[$key]['sections'][$k]['lessons'][$i]['name']=$lesson->name;
+            	}
+            }
         }
+        
+        foreach ($result as $key=>$course)
+        {
+            $i=0;
+            foreach ($course['sections'] as $s=>$section)
+            {
+                if($section['instructorId']==$instructorId)
+                {
+                    $i++;
+                }
+            }
+            if($i==0)
+                unset($result[$key]);
+        }
+        
         
         $formSection = new Form\CreateSectionForm('createsection-form');
         if ($this->getRequest()->isPost()) {
@@ -201,6 +219,81 @@ class InstructorController extends AbstractActionController
         );
     }
     
+    public function studentquestionsAction()
+    {
+        $lessonId = (int) $this->params()->fromRoute('id', 0);
+        
+        $questions = $this->getStudentQuestionTable()->getLessonQuestions($lessonId);
+        
+        $formAnswer = new Form\AnswerQuestionForm('asnwer-form');
+        if ($this->getRequest()->isPost()) {
+        	$studentquestion = new StudentQuestion();
+        	// Postback
+        	$data = array_merge_recursive(
+        			$this->getRequest()->getPost()->toArray(),
+        			$this->getRequest()->getFiles()->toArray()
+        	);
+        
+        	$formAnswer->setData($data);
+        	if ($formAnswer->isValid()) {
+        		$data = $formAnswer->getData();
+        		$studentquestion->exchangeArray($data);
+        		if(isset($data['id']))
+        		{
+        			$this->getStudentQuestionTable()->addAnswer($data);
+        			$this->redirect()->toRoute('instructor/default', array('controller'=>'instructor','action' => 'studentquestions','id'=>$lessonId));
+        		}
+        	}
+        }
+        
+        return array(
+            'questions'=>$questions,
+            'answerform' =>$formAnswer,
+            'lessonId' => $lessonId
+        );
+        
+    }
+    
+    public function sendquestionAction()
+    {
+        $lessonId = (int) $this->params()->fromRoute('id', 0);
+        $questionId = (int) $this->params()->fromRoute('key', 0);
+        $isAll = (int) $this->params()->fromRoute('form', 0);
+        
+        $mail = new Mail\Message();
+        $mail->setBody('This is the text of the email.');
+        if($isAll)
+        {
+            $mail->addTo('e_karatas@windowslive.com');
+        }
+        else 
+        {
+            $mail->addTo('e_karatas@windowslive.com');
+        }
+        
+        
+        
+        $mail->setFrom('EduBox');
+        $mail->setSubject('EduBox Question & Answer');
+        
+        $transport = new Mail\Transport\Sendmail();
+        $result=$transport->send($mail);
+        
+        if($result)
+            $this->redirect()->toRoute('instructor/default', array('controller'=>'instructor','action' => 'studentquestions','id'=>$lessonId));
+        else 
+            echo "gitmedi amk";
+    }
+    
+    public function deletequestionAction()
+    {
+        $lessonId = (int) $this->params()->fromRoute('id', 0);
+        $questionId = (int) $this->params()->fromRoute('key', 0);
+        
+        $this->getStudentQuestionTable()->deleteQuestion($questionId);
+        $this->redirect()->toRoute('instructor/default', array('controller'=>'instructor','action' => 'studentquestions','id'=>$lessonId));
+    }
+    
     public function studentsAction()
     {
         $sectionId = (int) $this->params()->fromRoute('id', 0);
@@ -217,6 +310,8 @@ class InstructorController extends AbstractActionController
         );
         
     }
+    
+    
     
     public function activatestudentAction()
     {
@@ -258,8 +353,8 @@ class InstructorController extends AbstractActionController
         		
         		$result=$this->getCourseTable()->addCourse($course);
         		$instructorId=$this->zfcUserAuthentication()->getIdentity()->getId();
-        		//if($result)
-        		    //$this->getCourseSectionTable()->addCourseSection($result,$instructorId);
+        		if($result)
+        		    $this->getCourseSectionTable()->addCourseSection($result,$instructorId);
         		
         		$this->redirect()->toRoute('instructor/panel');
         	}

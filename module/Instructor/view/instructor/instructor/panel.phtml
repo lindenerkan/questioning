@@ -1,18 +1,47 @@
-<div class="hero-unit" style="background-color:rgba(207, 207, 207, 0.23);">
+ <div style="position:absolute; margin-left:53%; margin-top:20px">Click <img src="http://82.196.1.215/public/img/glyphicons_113_justify.png"> to see the options.</div>
+<div class="hero-unit span6 offset2" style="background-color:rgba(207, 207, 207, 0.23); min-width:500px">
+    
+    
+    <?php //dersleri döndürüyorum?>
     <?php foreach ($courses as $keycourse=>$course):?>
-    <div class="panel-group" id="accordion">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h4 class="panel-title">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href=<?php echo '"#'.$keycourse.'"';?>>
-              <?php echo $course['code']. "  ". $course['name'];?>
-            </a>
-            <div style="float:right;">
-                <a href="#addSection<?php echo $course['id']?>" role="button" class="btn btn-info btn-small" data-toggle="modal">Add Section</a>
-                <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'editcourse','id'=>$course['id']));?>" class="btn btn-info btn-small">Edit Course</a>
-                <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'deletecourse','id'=>$course['id']));?>" class="btn btn-info btn-small">Delete Course</a>
-                <!-- Modal -->
-                    <div id="addSection<?php echo $course['id']?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <?php //if(!empty($course['sections'])):?>
+    <div class="row" style="min-width:500px">
+    <!-- ders için açılan menü -->
+        <div class="dropdown" style="display:inline-block;">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#"><b class="list-icon"></b></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+          <li><a href="#addSection<?php echo $course['id']?>" class="dropdown-toggle" role="button" data-toggle="modal">Add Section</a></li>
+          <li><a class="dropdown-toggle" href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'editcourse','id'=>$course['id']));?>">Edit Course</a></li>
+          <li><a href="#deleteCourse<?php echo $course['id']?>" role="button" data-toggle="modal">Delete course</a></li>
+          </ul>
+        </div>
+        <!-- ders için açılan menü sonu -->
+        
+            <!-- delete course onay Modal -->
+        <div id="deleteCourse<?php echo $course['id']?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Delete Course</h3>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to delete course: <?php echo $course['code']. "  ". $course['name'];?>?</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <a class="btn btn-primary" href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'deletecourse','id'=>$course['id']));?>">Delete Course</a>
+          </div>
+        </div>
+        <!-- delete course onay sonu Modal -->
+        
+        <!-- course name printed -->
+        <div style="display:inline-block">
+            <p><b><?php echo $course['code']. "  ". $course['name'];?></b></p>
+        </div>
+        <!-- course name printed sonu -->
+        
+        
+        <!-- add section modal -->
+        <div id="addSection<?php echo $course['id']?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                       <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         <h3 id="myModalLabel">Add Section for <?php echo $course['code']. "  ". $course['name'];?></h3>
@@ -76,94 +105,45 @@
                         <!--  <a href="<?php //echo $this->url('instructor/default', array('controller'=>'instructor','action' => 'addsection','id'=>$course['id']));?>" class="btn btn-info btn-small">Add Section</a>-->
                       </div>
                     </div>
+        <!-- add section modal sonu -->
+      
+        <?php //sectionları döndürüyorum?>    
+        <?php foreach ($course['sections'] as $keysection=>$section):?>
+        <div class="row span12" style="margin-left:20px; min-width:600px;">
+        <!-- section için açılan menü -->
+            <div class="span1 dropdown" style="width:30px;">
+              <a data-toggle="dropdown" href="#"><b class="list-icon"></b></a>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                  <li><a href="#addLesson<?php echo $course['id'].$section['id']?>" role="button" data-toggle="modal">Add Lesson</a></li>
+                  <li><a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'students','id'=>$section['id']));?>">Students</a></li>
+                  <li><a href="#deleteSection<?php echo $course['id'].$section['id']?>" role="button" data-toggle="modal">Delete Section</a></li>
+              </ul>
             </div>
-          </h4>
+            <!-- section için açılan menü sonu -->
+            
+            
+            <!-- delete section onay Modal -->
+        <div id="deleteSection<?php echo $course['id'].$section['id']?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Delete Section</h3>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to delete section: <?php echo $section['name'];?>?</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <a class="btn btn-primary" href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'deletesection','id'=>$section['id']));?>">Delete Section</a>
+          </div>
         </div>
-        <div id=<?php echo '"'.$keycourse.'"';?> class="panel-collapse collapse">
-          <div class="panel-body">
-            <div class="row" style="margin-left: 20px;">
-                <div class="panel-group" id="accordion">
-               <?php foreach ($course['sections'] as $keysection=>$section):
-                  // $sectiondisplay=(int) $keysection+1;?>
-               <div class="row" style="margin-left: 20px;">
-               <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h4 class="panel-title">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href=<?php echo '"#00'.$keysection.$keycourse.'"';?>>
-                      <?php echo $section['name'];//"Section ".$sectiondisplay; ?>
-                    </a>
-                    <div style="float:right;">
-                        <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'deletesection','id'=>$section['id']));?>" class="btn btn-warning btn-small">Delete Section</a>
-                        <a href="#addLesson<?php echo $course['id'].$section['id']?>" role="button" class="btn btn-warning btn-small" data-toggle="modal">Add Lesson</a>
-                        <!-- Modal -->
-                    <div id="addLesson<?php echo $course['id'].$section['id']?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="myModalLabel">Add Lesson for <?php echo $section['name'];?></h3>
-                      </div>
-                      <div class="modal-body">
-                        
-                        <?php
-                            // Init Form
-                            $form = $this->formLesson;
-                            $form->setAttribute('class', 'form-horizontal');
-                            $form->prepare();
-                            
-                            // Configure Errors Helper
-                            $errorsHelper  = $this->plugin('formelementerrors');
-                            $errorsHelper
-                                ->setMessageOpenFormat('<div class="help-block">')
-                                ->setMessageSeparatorString('</div><div class="help-block">')
-                                ->setMessageCloseString('</div>');
-                            ?>
-                            <?php echo $this->form()->openTag($form); ?>
-                            <fieldset>
-                                
-                                
-                                <?php
-                                $elem = $form->get('course_section_id');
-                                $elem->setValue($section['id']);
-                                $elem->setLabelAttributes(array('class' => 'control-label'));
-                                $errors = $elem->getMessages();
-                                $errorClass = (!empty($errors)) ? ' error' : '';
-                                ?>
-                                <div class="control-group<?php echo $errorClass ?>">
-                                    <div class="controls">
-                                        <?php echo $this->formHidden($elem); ?>
-                                        <?php echo $errorsHelper($elem); ?>
-                                    </div>
-                                </div>
-                                
-                                <?php
-                                $elem = $form->get('name');
-                                $elem->setLabelAttributes(array('class' => 'control-label'));
-                                $errors = $elem->getMessages();
-                                $errorClass = (!empty($errors)) ? ' error' : '';
-                                ?>
-                                <div class="control-group<?php echo $errorClass ?>">
-                                    <?php echo $this->formLabel($elem); ?>
-                                    <div class="controls">
-                                        <?php echo $this->formText($elem); ?>
-                                        <?php echo $errorsHelper($elem); ?>
-                                        <button class="btn btn-primary btn-small">Create Lesson</button>
-                                    </div>
-                                </div>
-                            
-                            
-                            </fieldset>
-                            <?php echo $this->form()->closeTag($form); ?>
-                        
-                      </div>
-                      <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                      </div>
-                    </div>
-                        
-                        <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'students','id'=>$section['id']));?>" class="btn btn-warning btn-small">Students</a>
-                    </div>
-                  </h4>
-                </div>
-                <div id=<?php echo '"00'.$keysection.$keycourse.'"';?> class="panel-collapse collapse">
+        <!-- delete section onay sonu Modal -->
+            
+            
+            <!-- section name printed -->
+            <div style="min-width:400px">
+                <p><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href=<?php echo '"#000'.$keysection.$keycourse.'"';?>><?php echo $section['name'];?> <span class="caret" style="margin-top:10px"> </span></a></p>
+                
+                <div style="margin-left:40px; min-width:300px" id=<?php echo '"000'.$keysection.$keycourse.'"';?> class="panel-collapse collapse">
                   <div class="panel-body">
                    <div class="row" style="margin-left: 20px;">
                        <?php foreach ($section['lessons'] as $keylesson=>$lesson):
@@ -171,27 +151,97 @@
                            <h4 class="has-warning">
                                <?php echo $lesson['name'];//"Lesson ".$lessondisplay; ?>
                                <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'quiz','id'=>$lesson['id']));?>" class="btn btn-success btn-small">Quiz</a>
+                               <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'studentquestions','id'=>$lesson['id']));?>" class="btn btn-primary btn-small">Student Questions</a>
                                <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'deletelesson','id'=>$lesson['id']));?>" class="btn btn-danger btn-small">Delete Lesson</a>
                            </h4>
                        <?php endforeach;?>
                    </div>
                   </div>
                 </div>
+            </div>
+            <!-- section name printed sonu-->
+            
+            <!-- add lesson için açılan modal -->
+            <!-- Modal -->
+            <div id="addLesson<?php echo $course['id'].$section['id']?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">Add Lesson for <?php echo $section['name'];?></h3>
               </div>
-           </div>    
-           <?php endforeach;?> 
+              <div class="modal-body">
+                
+                <?php
+                    // Init Form
+                    $form = $this->formLesson;
+                    $form->setAttribute('class', 'form-horizontal');
+                    $form->prepare();
+                    
+                    // Configure Errors Helper
+                    $errorsHelper  = $this->plugin('formelementerrors');
+                    $errorsHelper
+                        ->setMessageOpenFormat('<div class="help-block">')
+                        ->setMessageSeparatorString('</div><div class="help-block">')
+                        ->setMessageCloseString('</div>');
+                    ?>
+                    <?php echo $this->form()->openTag($form); ?>
+                    <fieldset>
+                        
+                        
+                        <?php
+                        $elem = $form->get('course_section_id');
+                        $elem->setValue($section['id']);
+                        $elem->setLabelAttributes(array('class' => 'control-label'));
+                        $errors = $elem->getMessages();
+                        $errorClass = (!empty($errors)) ? ' error' : '';
+                        ?>
+                        <div class="control-group<?php echo $errorClass ?>">
+                            <div class="controls">
+                                <?php echo $this->formHidden($elem); ?>
+                                <?php echo $errorsHelper($elem); ?>
+                            </div>
+                        </div>
+                        
+                        <?php
+                        $elem = $form->get('name');
+                        $elem->setLabelAttributes(array('class' => 'control-label'));
+                        $errors = $elem->getMessages();
+                        $errorClass = (!empty($errors)) ? ' error' : '';
+                        ?>
+                        <div class="control-group<?php echo $errorClass ?>">
+                            <?php echo $this->formLabel($elem); ?>
+                            <div class="controls">
+                                <?php echo $this->formText($elem); ?>
+                                <?php echo $errorsHelper($elem); ?>
+                                <button class="btn btn-primary btn-small">Create Lesson</button>
+                            </div>
+                        </div>
+                    
+                    
+                    </fieldset>
+                    <?php echo $this->form()->closeTag($form); ?>
+                
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+              </div>
             </div>
-            </div>
-          </div>
+            <!-- add lesson için açılan modal sonu -->
+            
+            
+            
+            
         </div>
-      </div>
+        <?php //section döngüleri sonu?>
+        <?php endforeach;?>
+    
     </div>
+    <?php //course döngüsü bitiyor?>
+    <?php //endif;?>
     <?php endforeach;?>
-<br><br>
-<a href="<?php echo $this->url('instructor/default',
-                    array('controller'=>'instructor','action' => 'createcourse'));?>" class="btn btn-success" style="float:right">Create course</a>    
+    <br><br>
+    <a href="<?php echo $this->url('instructor/default',
+                    array('controller'=>'instructor','action' => 'createcourse'));?>" class="btn btn-success" style="float:right">Create course</a>
 </div>
 
- 
-
-
+<div class="row">
+</div>

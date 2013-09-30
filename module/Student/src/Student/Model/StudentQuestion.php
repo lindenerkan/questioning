@@ -18,6 +18,8 @@ class StudentQuestion
     public $is_active;
     
     public $name;
+    
+    public $answer;
 
     protected $inputFilter;
 
@@ -28,6 +30,7 @@ class StudentQuestion
         $this->course_section_lesson_id = (isset($data['course_section_lesson_id'])) ? $data['course_section_lesson_id'] : null;
         $this->value = (isset($data['value'])) ? $data['value'] : null;
         $this->is_active = (isset($data['is_active'])) ? $data['is_active'] : null;
+        $this->answer = (isset($data['answer'])) ? $data['answer'] : null;
         $this->name = (isset($data['name'])) ? $data['name'] : null;
     }
 
@@ -52,6 +55,31 @@ class StudentQuestion
             		$factory->createInput(
             				array(
             						'name' => 'value',
+            						'required' => true,
+            						'filters' => array(
+            								array(
+            										'name' => 'StripTags'
+            								),
+            								array(
+            										'name' => 'StringTrim'
+            								)
+            						),
+            						'validators' => array(
+            								array(
+            										'name' => 'StringLength',
+            										'options' => array(
+            												'encoding' => 'UTF-8',
+            												'min' => 0,
+            												'max' => 128
+            										)
+            								)
+            						)
+            				)));
+            
+            $this->inputFilter->add(
+            		$factory->createInput(
+            				array(
+            						'name' => 'answer',
             						'required' => true,
             						'filters' => array(
             								array(

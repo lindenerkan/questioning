@@ -59,6 +59,18 @@ return array(
                     				)
                     		)
                     ),
+                    'panel' => array(
+                    		'type'    => 'Segment',
+                    		'options' => array(
+                    				'route'    => '/panel',
+                    				'constraints' => array(
+                    				),
+                    				'defaults' => array(
+                    						'controller' => 'Student',
+                    						'action'     => 'panel',
+                    				),
+                    		),
+                    ),
                 ),
             ),
         ),

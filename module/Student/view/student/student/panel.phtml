@@ -1,0 +1,12 @@
+<div class="hero-unit span3 offset3">
+<?php foreach ($courses as $course):?>
+    <div class="row">
+    <a 
+        href="<?php echo $this->url('student/default',array('controller'=>'student','action' => 'studentquestions','id'=>$course['sectionId']));?>" 
+        class="btn btn-primary" style="width:100%; margin-bottom:10px">
+            <?php echo $course['code']." ".$course['name'];?>
+    </a>
+    </div>
+<?php endforeach;?>
+</div>
+<div class="row"></div>

@@ -75,7 +75,50 @@ class StudentController extends AbstractActionController
             'courses'=>$courses
         );
     }
+
+    public function panelAction()
+    {
+        $studentId=$this->zfcUserAuthentication()->getIdentity()->getId();
+        $sections=$this->getStudentSectionTable()->getStudentActiveSections($studentId);
+        $result=array();
+        foreach ($sections as $key=>$section)
+        {
+            $courseSection=$this->getCourseSectionTable()->getCourse($section->course_section_id);
+            $courseId=$courseSection->course_id;
+            
+            $course=$this->getCourseTable()->getCourse($courseId);
+            $courseName=$course->name;
+            $courseCode=$course->code;
+            
+            $result[$key]['sectionId']=$section->course_section_id;
+            $result[$key]['code']=$courseCode;
+            $result[$key]['name']=$courseName;
+            
+            //echo $courseCode." ".$courseName."<br>";
+        }
         
+        return array(
+            'courses' => $result
+        );
+    } 
+    
+    public function studentquestionsAction()
+    {
+        $sectionId = (int) $this->params()->fromRoute('id', 0);
+        $lessons = $this->getCourseSectionLessonTable()->getLessons($sectionId);
+        $questions=array();
+        foreach ($lessons as $key=>$lesson)
+        {
+            $questions[$key]['name']=$lesson->name;
+            $questions[$key]['questions']= $this->getStudentQuestionTable()->getLessonQuestions($lesson->id);
+        }
+        
+        return array(
+            'questions' => $questions
+        );
+        
+    }
+    
     public function registerlistAction()
     {
         $studentId=$this->zfcUserAuthentication()->getIdentity()->getId();

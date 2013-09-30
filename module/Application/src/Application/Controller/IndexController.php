@@ -50,8 +50,8 @@ class IndexController extends AbstractActionController
         if ($this->zfcUserAuthentication()->getIdentity()->getAdmin()==1) {
         	return $this->redirect()->toRoute('instructor', array());
         }
-        elseif ($this->zfcUserAuthentication()->getIdentity()->getAdmin()==Null)
-            echo $this->zfcUserAuthentication()->getIdentity()->getAdmin();       
+        //elseif ($this->zfcUserAuthentication()->getIdentity()->getAdmin()==Null)
+        //    echo $this->zfcUserAuthentication()->getIdentity()->getAdmin();       
         else 
             return $this->redirect()->toRoute('student', array());
         

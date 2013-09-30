@@ -18,6 +18,8 @@ class StudentQuestion
     public $is_active;
     
     public $name;
+    
+    public $answer;
 
     protected $inputFilter;
 
@@ -29,6 +31,7 @@ class StudentQuestion
         $this->value = (isset($data['value'])) ? $data['value'] : null;
         $this->is_active = (isset($data['is_active'])) ? $data['is_active'] : null;
         $this->name = (isset($data['name'])) ? $data['name'] : null;
+        $this->answer = (isset($data['answer'])) ? $data['answer'] : null;
     }
 
     public function getArrayCopy ()
@@ -68,6 +71,32 @@ class StudentQuestion
             												'encoding' => 'UTF-8',
             												'min' => 0,
             												'max' => 128
+            										)
+            								)
+            						)
+            				)));
+            
+            
+            $this->inputFilter->add(
+            		$factory->createInput(
+            				array(
+            						'name' => 'answer',
+            						'required' => true,
+            						'filters' => array(
+            								array(
+            										'name' => 'StripTags'
+            								),
+            								array(
+            										'name' => 'StringTrim'
+            								)
+            						),
+            						'validators' => array(
+            								array(
+            										'name' => 'StringLength',
+            										'options' => array(
+            												'encoding' => 'UTF-8',
+            												'min' => 0,
+            												'max' => 700
             										)
             								)
             						)

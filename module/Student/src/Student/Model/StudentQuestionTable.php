@@ -18,6 +18,12 @@ class StudentQuestionTable
         return $resultSet;
     }
     
+    public function getLessonQuestions($lessonId)
+    {
+        $resultset=$this->tableGateway->select(array('course_section_lesson_id'=>$lessonId));
+        return $resultset;
+    }
+    
     public function isActive($id)
     {
         if($this->tableGateway->select(array('id'=>$id))->current()->is_active)

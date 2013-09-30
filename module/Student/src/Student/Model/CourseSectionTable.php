@@ -30,5 +30,6 @@ class CourseSectionTable
         $result=$this->tableGateway->select(array('id'=>$id))->current();
         return $result;
     }
+
     
 }
