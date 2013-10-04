@@ -1,14 +1,17 @@
 <div class="row span12">
   <?php if($settedQuiz):?>
-      <div class="hero-unit span6" style="padding:20px; text-align:center"> 
-          <h3 class="text-success">
+      <div class="hero-unit span6"
+		style="padding: 20px; text-align: center">
+		<h3 class="text-success">
               <?php echo $settedQuiz->name;?>
           </h3>
-          <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'endQuiz','id'=>$settedQuiz->course_section_lesson_id,'key'=>$settedQuiz->id));?>" class="btn btn-danger">End</a>
-          <br><br><br>
-          <span class="text-success" id="time" style="font-size:34px;"></span>
-      </div>
-      <script type="text/javascript">
+		<a
+			href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'endQuiz','id'=>$settedQuiz->course_section_lesson_id,'key'=>$settedQuiz->id));?>"
+			class="btn btn-danger">End</a> <br>
+		<br>
+		<br> <span class="text-success" id="time" style="font-size: 34px;"></span>
+	</div>
+	<script type="text/javascript">
         var myVar=setInterval(function(){myTimer()},1000);
         var i=0;
         var j=0;
@@ -30,75 +33,162 @@
     </script>
   <?php else:?>
       <?php foreach ($quizes as $quiz):?>
-         <div class="hero-unit span2" style="padding:20px; text-align:center"> 
-              <h3 class="text-info">
+         <div class="hero-unit span2" style="padding: 20px; text-align: center">
+		<h3 class="text-info">
                   <?php echo $quiz->name;?>
               </h3>
-              <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'startQuiz','id'=>$quiz->course_section_lesson_id,'key'=>$quiz->id));?>" class="btn btn-primary">Start</a>
-          </div>
+		<a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'startQuiz','id'=>$quiz->course_section_lesson_id,'key'=>$quiz->id));?>" class="btn btn-primary">Start</a>
+	</div>
       <?php endforeach;?>  
   <?php endif;?>
   
 </div>
-  <?php if ($report):?>
+<?php if ($report):?>
   
-  <?php foreach ($report as $chart):?>
-  <?php 
-//print_r($chart);
-//echo count($chart['values']);?>
+  <?php foreach ($report as $key=>$chart):?>
+  <?php
+        // print_r($chart);
+        // echo count($chart['values']);        ?>
   <?php if($chart['type']=='control_head'):?>
       
   <?php elseif($chart['type']=='control_radio' ||$chart['type']=='control_dropdown'):?>
-  <div class="row span8 offset2" style="margin-top:20px">
+<div class="row span4 offset4" style="margin-top: 20px">
       <?php if (isset($chart['values'])):?>
-      <?php $d=1;?>
-      <img src="../../../../../../bargraph/pie.php?
-      <?php foreach ($chart['values'] as $name=>$value):?>
-          <?php echo "d".$d."=".$value."&";?>
-          <?php echo "t".$d."=".$name."&";?>
-          <?php  $d++;?>
+    
+    <h3 style="text-align:center; color: #3F5666;"><?php echo $chart['text'];?></h3>
+    
+      <canvas id="canvas<?php echo $key;?>" height="350" width="350"></canvas>
+    
+    <?php $colors=array('#F38630','#E0E4CC','#69D2E7','#4D5360');?>  
+    
+    <?php $j=0;?>
+    <!-- chart bilgileri -->
+    <?php $total=0;?>
+    <?php foreach ($chart['values'] as $name=>$value):
+        $total+=$value;
+    endforeach;?>
+    
+      <div>
+          <?php foreach ($chart['values'] as $name=>$value):?>
+              <div>
+                  <div style="width:13px; height:15px; background-color:<?php echo $colors[$j];?>; display:inline-block"></div>
+                  <div style="display:inline-block"><?php echo $name;?> (<?php echo $value;?> student/s - %<?php echo round(($value/$total)*100);?>)</div>
+              </div>
+              <?php $j++;?>
           <?php endforeach;?>
-          <?php echo "title=".$chart['text'];?>
-          <?php echo "&count=".count($chart['values']);?>"
-           border=0>
+      </div>
+    <!-- chart bilgileri son-->
+    
+    <?php $i=0;?>
+	<script>
+		var pieData = [
+            <?php foreach ($chart['values'] as $name=>$value):?>
+                <?php echo "{ value:";?>
+                    <?php echo $value.",";?>
+                    <?php echo "color: '". $colors[$i]."'";?>
+    			<?php echo "},";?>
+    			<?php $i++;?>
+			<?php endforeach;?>
+			];
+
+	    var myPie = new Chart(document.getElementById("canvas<?php echo $key;?>").getContext("2d")).Pie(pieData);
+	</script>
+      
+      <!-- eski pie chart
+      <?php //$d=1;?>
+      <img
+		src="../../../../../../bargraph/pie.php?
+      <?php //foreach ($chart['values'] as $name=>$value):?>
+          <?php //echo "d".$d."=".$value."&";?>
+          <?php //echo "t".$d."=".$name."&";?>
+          <?php  //$d++;?>
+          <?php //endforeach;?>
+          <?php //echo "title=".$chart['text'];?>
+          <?php //echo "&count=".count($chart['values']);?>"
+		border=0>
+      -->      
+           
+           
+           
        <?php endif;?>
   </div>
-  <?php elseif($chart['type']=='control_checkbox'):?>
-    <div class="row span8 offset2" style="margin-top:50px">  
-      <?php $d=1;?>
-      <img src="../../../../../../bargraph/bar.php?
-      <?php foreach ($chart['values'] as $name=>$value):?>
-          <?php echo "d".$d."=".$value."&";?>
-          <?php echo "t".$d."=".$name."&";?>
-          <?php  $d++;?>
+<?php elseif($chart['type']=='control_checkbox'):?>
+<div class="row span4 offset4" style="margin-top: 50px">
+
+<h3 style="text-align:center; color: #3F5666;"><?php echo $chart['text'];?></h3>
+		<canvas id="canvas<?php echo $key;?>" height="350" width="350"></canvas>
+<?php $colors=array('#F38630','#E0E4CC','#69D2E7','#4D5360');?>
+ <?php $j=0;?>
+		<!-- chart bilgileri -->
+    <?php $total=0;?>
+    <?php foreach ($chart['values'] as $name=>$value):
+        $total+=$value;
+    endforeach;?>
+
+      <div>
+          <?php foreach ($chart['values'] as $name=>$value):?>
+              <div>
+                  <div style="width:13px; height:15px; background-color:<?php echo $colors[$j];?>; display:inline-block"></div>
+                  <div style="display:inline-block"><?php echo $name;?> (<?php echo $value;?> student/s)</div>
+              </div>
+              <?php $j++;?>
           <?php endforeach;?>
-          <?php echo "title=".$chart['text'];?>
-          <?php echo "&count=".count($chart['values']);?>"
-           border=0>
-  </div>
-  <?php elseif(isset($chart)):?>
+      </div>
+    <!-- chart bilgileri son-->
+		
+		
+	<script>
+      
+    <?php $j=0;?>
+    var doughnutData = [
+                        <?php foreach ($chart['values'] as $name=>$value):?>
+                        <?php echo '{value:'.$value.',color:"'.$colors[$j].'"},';?>
+                        <?php $j++;?>
+                        <?php endforeach;?>
+        			];
+
+	var myDoughnut = new Chart(document.getElementById("canvas<?php echo $key;?>").getContext("2d")).Doughnut(doughnutData);
+	
+	</script>
+
+
+<!-- eski chart bar 
+      <?php //$d=1;?>
+      <img
+		src="../../../../../../bargraph/bar.php?
+      <?php //foreach ($chart['values'] as $name=>$value):?>
+          <?php //echo "d".$d."=".$value."&";?>
+          <?php //echo "t".$d."=".$name."&";?>
+          <?php  //$d++;?>
+          <?php //endforeach;?>
+          <?php //echo "title=".$chart['text'];?>
+          <?php //echo "&count=".count($chart['values']);?>"
+		border=0>
+ -->
+		
+</div>
+<?php elseif(isset($chart)):?>
       <?php $d=1;?>
-      <div class="row span8 offset2" style="margin-top:50px">
-      <h2 style="color:#3F5666;"><?php echo $chart['text'];?></h2>
-      <table class="table">
-          <tr>
-              <th>#</th>
-              <th>Answer</th>
-          </tr>
+<div class="row span8 offset2" style="margin-top: 50px">
+	<h3 style="text-align:center; color: #3F5666;"><?php echo $chart['text'];?></h3>
+	<table class="table">
+		<tr>
+			<th>#</th>
+			<th>Answer</th>
+		</tr>
           <?php if (isset($chart['values'])):?>
           <?php foreach ($chart['values'] as $name=>$value):?>
           <tr>
-              <td><?php echo $d;?></td>
-              <td><?php echo $value?></td>
+			<td><?php echo $d;?></td>
+			<td><?php echo $value?></td>
           <?php  $d++;?>
           </tr>
           <?php endforeach;?>
           <?php endif;?>
       </table>
-      </div>
-  <?php endif;?>
+</div>
+<?php endif;?>
   <?php endforeach;?>
       <?php endif;?>
 
-<div class="row">
-</div>
+<div class="row"></div>

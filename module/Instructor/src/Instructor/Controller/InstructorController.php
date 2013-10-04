@@ -45,6 +45,8 @@ class InstructorController extends AbstractActionController
     
     protected $studentquestionTable;
     
+    protected $student_submissionTable;
+    
     protected function identity ()
     {
         $locale = $this->getEvent()
@@ -734,5 +736,14 @@ class InstructorController extends AbstractActionController
     		$this->studentquestionTable = $sm->get('Instructor\Model\StudentQuestionTable');
     	}
     	return $this->studentquestionTable;
+    }
+    
+    public function getStudentSubmissionTable()
+    {
+    	if (!$this->student_submissionTable) {
+    		$sm = $this->getServiceLocator();
+    		$this->student_submissionTable = $sm->get('Instructor\Model\StudentSubmissionTable');
+    	}
+    	return $this->student_submissionTable;
     }
 }

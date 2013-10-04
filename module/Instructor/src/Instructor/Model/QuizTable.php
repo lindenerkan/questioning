@@ -15,10 +15,12 @@ class QuizTable
 
     protected $tableGateway;
     protected $jotFormAPI;
+    protected $api;
     
     public function __construct (TableGateway $tableGateway)
     {
         $this->tableGateway = $tableGateway;
+        $this->api="c890d0436c8066c2a57e3d47904e1e20";
     }
     
     public function getLessonQuizes($lessonId)
@@ -45,13 +47,16 @@ class QuizTable
     
     public function createQuiz($lessonId,$quiz)
     {
-        $this->jotFormAPI = new JotForm("c890d0436c8066c2a57e3d47904e1e20");
+        $this->jotFormAPI = new JotForm($this->api);
         $name=$quiz->name;
         $quiz = array(
         		'questions' => array(),
         		'properties' => array(
         				'title' => $name,
-        				'height' => '600',
+        				'height' => '800',
+        		        'sendpostdata' => 'Yes',
+        		        'activeRedirect' => 'thankurl',
+        		        'thankurl' => "http://82.196.1.215/public/student/student/getsubmission",
         		),
         );
         $response = $this->jotFormAPI->createForm($quiz);
@@ -60,6 +65,7 @@ class QuizTable
             $forms = $this->jotFormAPI->getForms(0, 1, null, null);
             $latestForm = $forms[0];
             $latestFormID = $latestForm["id"];
+            
             if($this->addQuiz($lessonId, $latestFormID,$name))
                 return $latestFormID;
         }
@@ -67,7 +73,7 @@ class QuizTable
     
     public function report($formID)
     {
-        $this->jotFormAPI = new JotForm("c890d0436c8066c2a57e3d47904e1e20");
+        $this->jotFormAPI = new JotForm($this->api);
          
         //$formID="32621905483353";
         $submissions = $this->jotFormAPI->getFormSubmissions($formID);
@@ -174,6 +180,7 @@ class QuizTable
         );
         $this->tableGateway->insert($result);
     }
+    
     
     public function deleteQuiz($quizId)
     {

@@ -17,6 +17,8 @@ use Instructor\Model\StudentQuestion;
 use Instructor\Model\StudentQuestionTable;
 use Instructor\Model\StudentSection;
 use Instructor\Model\StudentSectionTable;
+use Instructor\Model\StudentSubmission;
+use Instructor\Model\StudentSubmissionTable;
 use Instructor\Model\Course;
 use Instructor\Model\CourseTable;
 use Instructor\Model\Quiz;
@@ -160,6 +162,19 @@ class Module
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new StudentQuestion());
     						return new TableGateway('student_question', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Instructor\Model\StudentSubmissionTable' => function  ($sm)
+    					{
+    						$tableGateway = $sm->get('StudentSubmissionTableGateway');
+    						$table = new StudentSubmissionTable($tableGateway);
+    						return $table;
+    					},
+    					'StudentSubmissionTableGateway' => function  ($sm)
+    					{
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new StudentSubmission());
+    						return new TableGateway('student_submission', $dbAdapter, null, $resultSetPrototype);
     					},
     			)
     	);

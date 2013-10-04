@@ -1,9 +1,76 @@
+<div class="hero-unit span7 offset2">
+<div style="text-align:center"> 
+<h3>Select Account Type</h3>      
+      <a href="<?php echo $this->url('application/default',array('controller'=>'index','action' => 'makestudent'));?>" class="btn btn-primary btn-large" style="margin:20px">Student</a>
+      <a href="<?php echo $this->url('application/default',array('controller'=>'index','action' => 'makeadmin'));?>" class="btn btn-primary btn-large" style="margin:20px">Instructor</a>
+</div>
+<h3>Students:</h3>
+      <ol>
+          <li>Register the EduBox</li>
+          <li>List all the courses and sections offered</li>
+          <li>Register a course section</li>
+          <li>Wait the instructor to be approved</li>
+          <li>Wait the course instructor to start the lesson</li>
+          <li>Joining the active lesson</li>
+          <li>Ask questions to the instructor</li>
+          <li>Receive and respond the instructor’s questions</li>
+      </ol>
+<h3>Instructors:</h3>
+<ol>
+    <li>Register the EduBox</li>
+    <li>Add courses</li>
+    <li>Add course sections</li>
+    <li>Add lessons for sections</li>
+    <li>Add quizzes for lessons</li>
+    <li>Activate/deactivate students for sections</li>
+    <li>Start/End the lesson</li>
+    <li>Receive/Answer student’s questions</li>
+    <li>Start/End quizzes created before the lesson</li>
+    <li>Receive charts and tables drawn according to responses</li>
+</ol>
+
+<p style="font-size:15px; text-align:justify">EduBox is a web application which helps instructors and students during lesson. With this application instructors ask questions to all students, analyze instant data and draw result charts and tables after each activity. With this app, instructors can easily measure and evaluate student’s performances. Moreover, instructors will be aware of understandings of students about the topic. EduBox will increase the productivity and concentration of the students during lesson. Thanks to using EduBox, collected data from students with quizzes and polls are highly reliable. According to responses, the instructor have chances to change instructional type or explain the part of the topic again.</p>
+<p style="font-size:15px; text-align:justify">Moreover, students ask question to instructor easily. As most instructors and teachers know, some students cannot ask the questions because they beware colleagues and teacher. With this app students can ask questions to the instructor with their nick name. So students feel free to ask not understanding points during lesson. With this property of the app, students’ understandings and efficiency of the lesson will increase on a large scale.</p> 
+      
+
+      </div>
+
+<div class="row"></div>
 <div id="first" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width:auto">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Acount Type</h3>
+        <h3 id="myModalLabel">EduBox</h3>
       </div>
       <div class="modal-body">
+      <h3>Students:</h3>
+      <ol>
+          <li>Register the EduBox</li>
+          <li>List all the courses and sections offered</li>
+          <li>Register a course section</li>
+          <li>Wait the instructor to be approved</li>
+          <li>Wait the course instructor to start the lesson</li>
+          <li>Joining the active lesson</li>
+          <li>Ask questions to the instructor</li>
+          <li>Receive and respond the instructor’s questions</li>
+      </ol>
+<h3>Instructors:</h3>
+<ol>
+    <li>Register the EduBox</li>
+    <li>Add courses</li>
+    <li>Add course sections</li>
+    <li>Add lessons for sections</li>
+    <li>Add quizzes for lessons</li>
+    <li>Activate/deactivate students for sections</li>
+    <li>Start/End the lesson</li>
+    <li>Receive/Answer student’s questions</li>
+    <li>Start/End quizzes created before the lesson</li>
+    <li>Receive charts and tables drawn according to responses</li>
+</ol>
+
+<p>EduBox is a web application which helps instructors and students during lesson. With this application instructors ask questions to all students, analyze instant data and draw result charts and tables after each activity. With this app, instructors can easily measure and evaluate student’s performances. Moreover, instructors will be aware of understandings of students about the topic. EduBox will increase the productivity and concentration of the students during lesson. Thanks to using EduBox, collected data from students with quizzes and polls are highly reliable. According to responses, the instructor have chances to change instructional type or explain the part of the topic again.</p>
+<p>Moreover, students ask question to instructor easily. As most instructors and teachers know, some students cannot ask the questions because they beware colleagues and teacher. With this app students can ask questions to the instructor with their nick name. So students feel free to ask not understanding points during lesson. With this property of the app, students’ understandings and efficiency of the lesson will increase on a large scale.</p> 
+      
+<h3>Select Account Type</h3>      
       <a href="<?php echo $this->url('application/default',array('controller'=>'index','action' => 'makestudent'));?>" class="btn btn-primary btn-large" style="margin:20px">Student</a>
       <a href="<?php echo $this->url('application/default',array('controller'=>'index','action' => 'makeadmin'));?>" class="btn btn-primary btn-large" style="margin:20px">Instructor</a>
       </div>
@@ -11,8 +78,8 @@
       </div>
 </div>
 <script type="text/javascript">
-$('#first').modal('show');
-$('#first').on('hidden', function () {
-	$('#first').modal('show');
-	})
+//$('#first').modal('show');
+//$('#first').on('hidden', function () {
+//	$('#first').modal('show');
+//	})
 </script>

@@ -36,6 +36,8 @@ class StudentController extends AbstractActionController
     
     protected $course_sectionTable;
     
+    protected $student_submissionTable;
+    
     protected $course_section_lessonTable;
     
     protected function identity ()
@@ -250,6 +252,33 @@ class StudentController extends AbstractActionController
     
     }
     
+    public function getsubmissionAction()
+    {
+        $lessonId = (int) $this->params()->fromRoute('id', 0);
+        
+        $studentId=$this->zfcUserAuthentication()->getIdentity()->getId();
+        
+        
+        $post= $_POST;
+        $formID= $post['formID'];
+        $subID = $post['submission_id'];
+        $ip = $post['ip'];
+        
+       
+        $this->getStudentSubmissionTable()->addSub($subID,$formID,$studentId,$ip);
+        
+        
+    }
+    
+    public function displayquizAction()
+    {
+        $formId = (int) $this->params()->fromRoute('id', 0);
+        
+        return array(
+            'formId' => $formId
+        );
+    } 
+    
     public function getStudentTable()
     {
     	if (!$this->studentTable) {
@@ -311,6 +340,15 @@ class StudentController extends AbstractActionController
     		$this->studentquestionTable = $sm->get('Student\Model\StudentQuestionTable');
     	}
     	return $this->studentquestionTable;
+    }
+    
+    public function getStudentSubmissionTable()
+    {
+    	if (!$this->student_submissionTable) {
+    		$sm = $this->getServiceLocator();
+    		$this->student_submissionTable = $sm->get('Student\Model\StudentSubmissionTable');
+    	}
+    	return $this->student_submissionTable;
     }
     
 }

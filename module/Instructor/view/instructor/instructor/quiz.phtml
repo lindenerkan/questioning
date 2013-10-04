@@ -5,6 +5,26 @@
         <span class="text-info"><?php echo $quiz->name;?></span>
         <button class="form_edit btn btn-info btn-small" id="<?php echo $quiz->form_id;?>">Edit</button>
         <a href="<?php echo $this->url('instructor/default',array('controller'=>'instructor','action' => 'deletequiz','id'=>$quiz->id,'key'=>$quiz->course_section_lesson_id));?>" class="btn btn-info btn-small form-edit">Delete</a>
+        <a href="#link<?php echo $quiz->form_id;?>" data-toggle="modal" class="btn btn-info btn-small">Link</a>
+        <!-- show question link modal -->
+                <div id="link<?php echo $quiz->form_id;?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3>Quiz link</h3>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                        <small><textarea rows="2" cols="8" style="width:90%">http://82.196.1.215/public/student/student/displayquiz/<?php echo $quiz->form_id;?></textarea></small>
+                    </p>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                  
+                  </div>
+                </div>
+            <!-- show question link modal sonu-->
+        
+        
         <br><br>
     </div>
 <?php }?>

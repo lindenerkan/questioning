@@ -20,6 +20,7 @@
                                       ->prependFile($this->basePath() . '/js/bootstrap.min.js')
                                       ->prependFile($this->basePath() . '/js/JotFormAnywhere.js')
                                       ->prependFile($this->basePath() . '/js/JotForm.js')
+                                      ->prependFile($this->basePath() . '/js/Chart.js')
                                       //->prependFile($this->basePath() . '/js/prototype.js')
                                       ->prependFile($this->basePath() . '/js/jquery.min.js') ?>
 
@@ -74,7 +75,7 @@
             <?php echo $this->content; ?>
             <hr>
             <footer>
-                <p>&copy; 2013 by Linden Digital Publishing <?php echo $this->translate('All rights reserved.') ?></p>
+                <p>&copy; 2013 by <a href="http://linden-tech.com/" target="_blank">Linden Digital Publishing</a> <?php echo $this->translate('All rights reserved.') ?></p>
             </footer>
         </div> <!-- /container -->
         <?php echo $this->inlineScript() ?>
