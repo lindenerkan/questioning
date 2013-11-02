@@ -283,8 +283,6 @@ class InstructorController extends AbstractActionController
         
         if($result)
             $this->redirect()->toRoute('instructor/default', array('controller'=>'instructor','action' => 'studentquestions','id'=>$lessonId));
-        else 
-            echo "gitmedi amk";
     }
     
     public function deletequestionAction()
@@ -485,7 +483,7 @@ class InstructorController extends AbstractActionController
             $passive_questions=$this->getStudentQuestionTable()->getPassiveQuestions($courseSectionLessonId);
             
             
-            $myFile = "log.html";
+            $myFile = $courseSectionLessonId."log.html";
             if(is_file($myFile))
             unlink($myFile);
             
@@ -497,7 +495,7 @@ class InstructorController extends AbstractActionController
                         <h4>".$question->name."</h4>
                             <span>".$question->value."</span>
                                 </div></div>";
-                $fp = fopen("log.html", 'a');
+                $fp = fopen($courseSectionLessonId."log.html", 'a');
                 fwrite($fp, $text);
                 fclose($fp);
             }
@@ -511,7 +509,7 @@ class InstructorController extends AbstractActionController
                         <h4>".$question->name."</h4>
                             <span>".$question->value."</span>
                                 </div></div>";
-            	$fp = fopen("log.html", 'a');
+            	$fp = fopen($courseSectionLessonId."log.html", 'a');
             	fwrite($fp, $text);
             	fclose($fp);
             }
@@ -576,7 +574,7 @@ class InstructorController extends AbstractActionController
         $quiz=$this->getQuizTable()->getQuiz($quizId)->form_id;
         //$text='<script type="text/javascript" src="http://form.jotformeu.com/jsform/'.$quiz->form_id.'"></script>';
         $text='<iframe id="JotFormIFrame" onload="window.parent.scrollTo(0,0)" allowtransparency="true" src="http://form.jotformeu.com/form/'.$quiz.'" frameborder="0" style="width:100%; height:465px; border:none;" scrolling="no"></iframe>';
-        $fp = fopen("quiz.html", 'a');
+        $fp = fopen($lessonId."quiz.html", 'a');
         fwrite($fp, $text);
         fclose($fp);
         
@@ -590,7 +588,7 @@ class InstructorController extends AbstractActionController
     	$quizId = (int) $this->params()->fromRoute('key', 0);
     	$lessonId = (int) $this->params()->fromRoute('id', 0);
     	
-    	$myFile = "quiz.html";
+    	$myFile = $lessonId."quiz.html";
     	if(is_file($myFile))
     		unlink($myFile);
     

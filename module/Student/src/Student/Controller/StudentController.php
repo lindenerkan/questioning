@@ -191,9 +191,9 @@ class StudentController extends AbstractActionController
             		
                     
             		
-            		if(is_executable("log.html"))
+            		if(is_executable($lessonId."log.html"))
             		{
-            		    $myFile = "log.html";
+            		    $myFile = $lessonId."log.html";
             		    $fh = fopen($myFile, 'r');
             		    $theData = fread($fh, filesize($myFile));
             		    unlink($myFile);
@@ -211,7 +211,7 @@ class StudentController extends AbstractActionController
                         <h4>".$name."</h4>
                             <span>".$data['value']."</span>
                                 </div></div>".$theData;
-            		$fp = fopen("log.html", 'a');
+            		$fp = fopen($lessonId."log.html", 'a');
             		fwrite($fp, $text);
             		fclose($fp);
             		

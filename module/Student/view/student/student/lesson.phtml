@@ -92,7 +92,7 @@ function loadLog(){
 	//$("#quiz").html("");
 	
 		$.ajax({
-			url: "../../../../../quiz.html",
+			url: "../../../../../<?php echo $lessonId;?>quiz.html",
 			cache: false,
 			success: function(html){
 				if(html==false)
